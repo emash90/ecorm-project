@@ -33,13 +33,19 @@ const loginUser = async (req, res) => {
         if (!loggedInUser) {
             return res.status(404).send("User not found");
         } else {
-            if (password === loggedInUser.password) {
+            /////unhash password
+            const noHashPassword = await bcrypt.compare(password, loggedInUser.password);
+            if (noHashPassword) {
                 return res.status(200).json({
                     id: loggedInUser._id,
                     username: loggedInUser.username,
                     email: loggedInUser.email,
-                    role: loggedInUser.role
+                    role: loggedInUser.role,
+                    token: req.token
                 })
+                /////store user session in redis
+                req.session.user = loggedInUser;
+            
             } else {
                 return res.status(401).send("Password incorrect");
             }
