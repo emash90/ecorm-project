@@ -2,25 +2,28 @@ const express = require('express');
 const app = express();
 const axios = require('axios');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 app.listen(port, () => {
   console.log(`Server Running at ${port}`);
 });
 
 // Auth microservice
-const authURL = "http://localhost:4000/auth/v1";
+const AUTH_SERVICE_HOST = process.env.AUTH_SERVICE_HOST || 'localhost';
+const authURL = 'http://' + AUTH_SERVICE_HOST + ':4000'
 
 // Fetch responses from auth microservice
 app.use('/auth/v1', async (req, res) => {
-  const url = `${authURL}${req.url}`;
+  const url = `${authURL}` + '/auth/v1' + req.url;
   const method = req.method;
   const data = req.body;
-  
+  console.log(`Request to ${url} with method ${method} and data ${JSON.stringify(data)}`);
   try {
     const response = await fetchAuth(url, method, data);
     res.status(response.status).send(response.data);

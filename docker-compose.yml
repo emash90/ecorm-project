@@ -42,3 +42,15 @@ services:
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+  apiGateway:
+    build: ./api-gateway
+    image: apigatewaycontainer
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./api-gateway:/app
+      - /app/node_modules
+    environment:
+      - AUTH_SERVICE_HOST=authService
+    command: ["npm", "run", "dev"]
+  

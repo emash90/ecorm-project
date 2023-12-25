@@ -34,18 +34,10 @@ const loginUser = async (req, res) => {
         if (!loggedInUser) {
             return res.status(404).send("User not found");
         } else {
-            /////unhash password
-            const passwordMatch = await bcrypt.compare(password, loggedInUser.password);
-            if (passwordMatch) {   
-                /////////////set session
+            const passwordCorrect = await bcrypt.compare(password, loggedInUser.password);
+            if (passwordCorrect) {
                 req.session.user = loggedInUser;
-                console.log("req.session", req.session);             
-                return res.status(200).json({
-                    id: loggedInUser._id,
-                    username: loggedInUser.username,
-                    email: loggedInUser.email,
-                    role: loggedInUser.role
-                })
+                return res.status(200).send("Login successful");
             
             } else {
                 return res.status(401).send("Password incorrect");
