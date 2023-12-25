@@ -52,5 +52,26 @@ services:
       - /app/node_modules
     environment:
       - AUTH_SERVICE_HOST=authService
+      - PRODUCT_SERVICE_HOST=productService
+    command: ["npm", "run", "dev"]
+  productService:
+    build: ./productService
+    image: productservicecontainer
+    ports:
+      - "4001:4001"
+    volumes:
+      - ./productservice:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - MONGO_USERNAME=emash90
+      - MONGO_PASSWORD=123456
+      - MONGO_HOST=db
+      - MONGO_PORT=27017
+      - MONGO_DB=product
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - db
     command: ["npm", "run", "dev"]
   
