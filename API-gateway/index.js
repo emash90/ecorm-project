@@ -14,6 +14,8 @@ app.listen(port, () => {
   console.log(`Server Running at ${port}`);
 });
 
+let user_session_id;
+
 // Auth microservice
 const AUTH_SERVICE_HOST = process.env.AUTH_SERVICE_HOST || 'localhost';
 const authURL = 'http://' + AUTH_SERVICE_HOST + ':4000'
@@ -23,9 +25,9 @@ app.use('/auth/v1', async (req, res) => {
   const url = `${authURL}` + '/auth/v1' + req.url;
   const method = req.method;
   const data = req.body;
-  console.log(`Request to ${url} with method ${method} and data ${JSON.stringify(data)}`);
   try {
     const response = await fetchAuth(url, method, data);
+    console.log("response", response);
     res.status(response.status).send(response.data);
   } catch (error) {
     console.error(error);
@@ -40,6 +42,7 @@ const fetchAuth = async (url, method, data) => {
       method,
       data
     });
+    user_session_id = response.data.session_id;
     return response;
   } catch (error) {
     console.error(error);
@@ -60,6 +63,7 @@ const productURL = 'http://' + PRODUCT_SERVICE_HOST + ':4001'
 app.use('/product/v1', async (req, res) => {
   const url = `${productURL}` + '/product/v1' + req.url;
   const method = req.method;
+  req.body.session_id = user_session_id;
   const data = req.body;
   console.log(`Request to ${url} with method ${method} and data ${JSON.stringify(data)}`);
   try {

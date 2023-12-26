@@ -50,6 +50,9 @@ services:
     volumes:
       - ./api-gateway:/app
       - /app/node_modules
+    depends_on:
+      - authService
+      - productService
     environment:
       - AUTH_SERVICE_HOST=authService
       - PRODUCT_SERVICE_HOST=productService
@@ -62,6 +65,9 @@ services:
     volumes:
       - ./productservice:/app
       - /app/node_modules
+    depends_on:
+      - db
+      - redis
     environment:
       - NODE_ENV=development
       - MONGO_USERNAME=emash90
@@ -71,7 +77,5 @@ services:
       - MONGO_DB=product
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-    depends_on:
-      - db
     command: ["npm", "run", "dev"]
   

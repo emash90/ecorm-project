@@ -36,7 +36,7 @@ app.use(
         saveUninitialized: false,
         cookie: {
             httpOnly: true,
-            maxAge: 1000 * 60 * 10
+            maxAge: 1000 * 60 * 1 // 1 minutes
         }
     })
 );
