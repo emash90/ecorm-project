@@ -6,7 +6,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ./data:/data/db
+       - mongodb:/data/db
     environment:
       - MONGO_USERNAME=emash90
       - MONGO_PASSWORD=123456
@@ -78,4 +78,6 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     command: ["npm", "run", "dev"]
-  
+
+volumes:
+  mongodb:
