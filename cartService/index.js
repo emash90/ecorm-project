@@ -1,13 +1,11 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const cors = require('cors');
 
-const axios = require('axios');
 
-const port = process.env.PORT || 5001;
 
-app.use(cors());
+const port = process.env.PORT || 5003;
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -32,6 +30,6 @@ const connect_with_retry = () => {
 
 connect_with_retry();
 
-const productRoutes = require('./routes/v1/productRoutes');
 
-app.use('/product/v1', productRoutes);
+
+

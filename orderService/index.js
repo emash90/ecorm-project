@@ -3,9 +3,8 @@ const app = express();
 const mongoose = require('mongoose');
 const cors = require('cors');
 
-const axios = require('axios');
 
-const port = process.env.PORT || 5001;
+const port = process.env.PORT || 5002;
 
 app.use(cors());
 app.use(express.json());
@@ -32,6 +31,6 @@ const connect_with_retry = () => {
 
 connect_with_retry();
 
-const productRoutes = require('./routes/v1/productRoutes');
+const orderRoutes = require('./routes/v1/orderRoutes');
 
-app.use('/product/v1', productRoutes);
+app.use('/orders/v1', orderRoutes);

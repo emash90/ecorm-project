@@ -26,10 +26,10 @@ const registerUser = async (req, res) => {
 ///////login user
 
 const loginUser = async (req, res) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
     try {
-        const loggedInUser = await User.findOne({ username: username });
+        const loggedInUser = await User.findOne({ email });
         if (!loggedInUser) {
             return res.status(404).send("User not found");
         } else {
