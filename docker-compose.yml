@@ -14,12 +14,12 @@ services:
       - MONGO_PORT=27017
       - MONGO_DB=auth
   authService:
-    build: ./authservice
+    build: ./backend/authservice
     image: authservicecontainer
     ports:
       - "4000:4000"
     volumes:
-      - ./authservice:/app
+      - ./backend/authservice:/app
       - /app/node_modules
     environment:
       - NODE_ENV=development
@@ -43,12 +43,12 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
   apiGateway:
-    build: ./api-gateway
+    build: ./backend/api-gateway
     image: apigatewaycontainer
     ports:
       - "5000:5000"
     volumes:
-      - ./api-gateway:/app
+      - ./backend/api-gateway:/app
       - /app/node_modules
     depends_on:
       - authService
@@ -59,12 +59,12 @@ services:
       - ORDER_SERVICE_HOST=orderService
     command: ["npm", "run", "dev"]
   productService:
-    build: ./productService
+    build: ./backend/productService
     image: productservicecontainer
     ports:
       - "5001:5001"
     volumes:
-      - ./productservice:/app
+      - ./backend/productservice:/app
       - /app/node_modules
     depends_on:
       - db
@@ -80,12 +80,12 @@ services:
       - REDIS_PORT=6379
     command: ["npm", "run", "dev"]
   orderService:
-    build: ./orderService
+    build: ./backend/orderService
     image: orderservicecontainer
     ports:
       - "5002:5002"
     volumes:
-      - ./orderservice:/app
+      - ./backend/orderservice:/app
       - /app/node_modules
     depends_on:
       - db
