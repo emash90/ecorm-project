@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { addCart } from "../redux/action";
+import { Nav, NavDropdown } from "react-bootstrap";
 
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -72,15 +73,30 @@ const Products = () => {
   const ShowProducts = () => {
     return (
       <>
-        <div className="buttons text-center py-5">
-          <button className="btn btn-outline-dark btn-sm m-2" onClick={() => setFilter(data)}>All</button>
-          <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct("men's clothing")}>Men's Clothing</button>
-          <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct("women's clothing")}>
-            Women's Clothing
-          </button>
-          <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct("jewelery")}>Jewelery</button>
-          <button className="btn btn-outline-dark btn-sm m-2" onClick={() => filterProduct("electronics")}>Electronics</button>
-        </div>
+        <Nav className="justify-content-center" activeKey="/home">
+          <Nav.Item>
+            <Nav.Link href="/home">All</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <NavDropdown title="Face Products" id="nav-dropdown">
+              <NavDropdown.Item onClick={() => setFilter(data)} >All</NavDropdown.Item>
+              <NavDropdown.Item onClick={()=> (filterProduct("jewelery"))}>Face Wash</NavDropdown.Item>
+              <NavDropdown.Item onClick={()=> (filterProduct("men's clothing"))}>Face Cream</NavDropdown.Item>
+              <NavDropdown.Item onClick={()=> (filterProduct("jewelery"))}>Face Mask</NavDropdown.Item>
+              <NavDropdown.Item onClick={()=> (filterProduct("jewelery"))}>Face Scrub</NavDropdown.Item>
+              <NavDropdown.Item onClick={()=> (filterProduct("jewelery"))}>Face Serum</NavDropdown.Item>
+              <NavDropdown.Item onClick={()=> (filterProduct("jewelery"))}>Face Toner</NavDropdown.Item>
+            </NavDropdown >
+          </Nav.Item>
+          <Nav.Item>
+            <NavDropdown title="Hair Products" id="nav-dropdown">
+              <NavDropdown.Item href="#action/3.1">Shampoo</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.2">Conditioner</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.3">Hair Oil</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.3">Hair Serum</NavDropdown.Item>
+            </NavDropdown>
+          </Nav.Item>
+        </Nav>
 
         {filter.map((product) => {
           return (

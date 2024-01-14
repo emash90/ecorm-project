@@ -3,8 +3,14 @@ const Product = require('../models/productModel');
 
 
 const add_product = async (req, res) => {
-    const { name, price, description } = req.body;
-    const product = new Product({ name, price, description });
+    const data = req.body;
+    const product = new Product({ 
+        name: data.name,
+        price: data.price,
+        description: data.description,
+        category: data.category,
+        price: data.price
+    });
     try {
         await product.save();
         res.status(201).send(product);

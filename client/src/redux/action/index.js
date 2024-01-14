@@ -13,3 +13,4 @@ export const delCart = (product) =>{
         payload:product
     }
 }
+

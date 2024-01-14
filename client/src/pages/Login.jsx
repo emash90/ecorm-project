@@ -1,24 +1,28 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, {  useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Footer, Navbar } from "../components";
+import { useDispatch, useSelector } from "react-redux";
+import  { userLoginSuccess } from "../redux/action/userActions";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const [user_data, setUser_data] = useState({});
+  const [formData, setFormData] = useState({
+    email: "",
+    password: ""
+  })
+
+  const { email, password } = formData;
 
   const handleInput = (e) => {
     const { name, value } = e.target;
-    if (name === "email") {
-      setEmail(value)
-    } else {
-      setPassword(value)
-    }
+    setFormData({ ...formData, [name]: value });
   }
 
 
   const handleLogin = (e) => {
     e.preventDefault()
-    console.log("email", email, "password", password )
 
     /////////////////////////get the data from the backend
     fetch("http://localhost:5000/auth/v1/login", {
@@ -30,14 +34,20 @@ const Login = () => {
     })
     .then(res => res.json())
     .then(data => {
-      console.log(data)
+      setUser_data(data)
+      dispatch(userLoginSuccess(data))
     })
-    .catch(err => console.log(err))
-
-
-
-    
+    .catch(err => console.log(err))    
   }
+
+
+    if(user_data.role === "client") {
+      navigate("/")
+    } else if (user_data.role === "admin") {
+      navigate("/admin")
+    } else if (user_data.role === "merchant") {
+      navigate("/merchant")
+    }
 
   return (
     <>
