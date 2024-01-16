@@ -4,16 +4,21 @@ const Product = require('../models/productModel');
 
 const add_product = async (req, res) => {
     const data = req.body;
+    const user_id = req.session.user._id;
+    console.log("user_id", user_id);
     const product = new Product({ 
-        name: data.name,
-        price: data.price,
-        description: data.description,
-        category: data.category,
-        price: data.price
+        user_id: user_id,
+        product_name: data.product_name,
+        product_description: data.product_description,
+        product_price: data.product_price,
+        product_category: data.product_category,
+        product_subcategory: data.product_subcategory,
+        product_image: data.product_image,
+        product_quantity: data.product_quantity
     });
     try {
         await product.save();
-        res.status(201).send(product);
+        res.status(201).json(product);
     } catch (error) {
         console.log(error);
     }
@@ -52,9 +57,13 @@ const get_all_products = async (req, res) => {
             products.map(product => {
                 return {
                     id: product._id,
-                    name: product.name,
-                    price: product.price,
-                    description: product.description
+                    name: product.product_name,
+                    price: product.product_price,
+                    description: product.product_description,
+                    category: product.product_category,
+                    subcategory: product.product_subcategory,
+                    image: product.product_image,
+                    quantity: product.product_quantity
                 }
             })
         );

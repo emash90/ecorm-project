@@ -34,30 +34,63 @@ const Navbar = () => {
                 >
                     <span className="navbar-toggler-icon"></span>
                 </button>
-
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul className="navbar-nav m-auto my-2 text-center">
-                        <li className="nav-item">
-                            <NavLink className="nav-link" to="/">
-                                Home
-                            </NavLink>
-                        </li>
-                        <li className="nav-item">
-                            <NavLink className="nav-link" to="/product">
-                                Products
-                            </NavLink>
-                        </li>
-                        <li className="nav-item">
-                            <NavLink className="nav-link" to="/about">
-                                About
-                            </NavLink>
-                        </li>
-                        <li className="nav-item">
-                            <NavLink className="nav-link" to="/contact">
-                                Contact
-                            </NavLink>
-                        </li>
-                    </ul>
+                { user && user.role === 'merchant' && (
+                    <>
+                        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul className="navbar-nav m-auto my-2 text-center">
+                                <li className="nav-item">
+                                    <NavLink className="nav-link" to="/merchant">
+                                        Home
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link" to="/merchant/add_product">
+                                        Add Products
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link" to="/about">
+                                        My Orders
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link" to="/contact">
+                                        Contact
+                                    </NavLink>
+                                </li>
+                            </ul>
+                        </div>
+                    </> 
+                    )}
+                { user && user.role === 'client' && (
+                    <>
+                        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul className="navbar-nav m-auto my-2 text-center">
+                                <li className="nav-item">
+                                    <NavLink className="nav-link" to="/">
+                                        Home
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link" to="/product">
+                                        Products
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link" to="/about">
+                                        About
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink className="nav-link" to="/contact">
+                                        Contact
+                                    </NavLink>
+                                </li>
+                            </ul>
+                            </div>
+                    </>
+                )}
+                <div className="d-flex">
                     <div className="buttons text-center">
                         <NavLink to="/cart" className="btn btn-outline-dark m-2">
                             <i className="fa fa-cart-shopping mr-1"></i> Cart ({state.length})

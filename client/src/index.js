@@ -9,6 +9,7 @@ import store, { persistor } from './redux/store';
 
 
 import { Home, Product, Products, AboutPage, ContactPage, Cart, Login, Register, Checkout, PageNotFound } from "./pages"
+import AddProduct from './pages/AddProduct';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -17,6 +18,8 @@ root.render(
       <PersistGate loading={null} persistor={persistor}>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/merchant" element={<Products />} />
+        <Route path="/merchant/add_product" element={<AddProduct />} />
         <Route path="/product" element={<Products />} />
         <Route path="/product/:id" element={<Product />} />
         <Route path="/about" element={<AboutPage />} />

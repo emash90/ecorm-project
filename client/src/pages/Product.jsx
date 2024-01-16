@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Marquee from "react-fast-marquee";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addCart } from "../redux/action";
 
 import { Footer, Navbar } from "../components";
+import { Button } from "react-bootstrap";
 
 const Product = () => {
+  const {user } = useSelector((state) => state.Auth);
+  const user_role = user.role;
   const { id } = useParams();
   const [product, setProduct] = useState([]);
   const [similarProducts, setSimilarProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const addProduct = (product) => {
@@ -24,7 +28,7 @@ const Product = () => {
     const getProduct = async () => {
       setLoading(true);
       setLoading2(true);
-      const response = await fetch(`https://fakestoreapi.com/products/${id}`);
+      const response = await fetch(`http://localhost:5000/product/v1/${id}`);
       const data = await response.json();
       setProduct(data);
       setLoading(false);
@@ -37,6 +41,15 @@ const Product = () => {
     };
     getProduct();
   }, [id]);
+  console.log("product", product)
+  const handleProductEdit = (id) => {
+    console.log("product edit", id)
+    navigate(`/merchant/edit_product/${id}`)
+
+  }
+
+  const handleProductDelete = () => {
+  }
 
   const Loading = () => {
     return (
@@ -77,13 +90,17 @@ const Product = () => {
             </div>
             <div className="col-md-6 col-md-6 py-5">
               <h4 className="text-uppercase text-muted">{product.category}</h4>
-              <h1 className="display-5">{product.title}</h1>
-              <p className="lead">
-                {product.rating && product.rating.rate}{" "}
-                <i className="fa fa-star"></i>
-              </p>
-              <h3 className="display-6  my-4">${product.price}</h3>
-              <p className="lead">{product.description}</p>
+              <h1 className="display-5">{product.product_name}</h1>
+             {user_role === 'client' && (
+               <p className="lead">
+               {product.rating && product.rating.rate}{" "}
+               <i className="fa fa-star"></i>
+             </p>
+             )}
+              <h3 className="display-6  my-4">${product.product_price}</h3>
+              <p className="lead">{product.product_description}</p>
+              {user_role === 'client' && (
+                <>
               <button
                 className="btn btn-outline-dark"
                 onClick={() => addProduct(product)}
@@ -93,6 +110,18 @@ const Product = () => {
               <Link to="/cart" className="btn btn-dark mx-3">
                 Go to Cart
               </Link>
+              </>
+              )}
+              {user_role === 'merchant' && (
+                <>
+                <Button className='mr-3' variant="primary" type="button" onClick={() => {handleProductEdit(product.id)}}>
+                    Edit Product
+                </Button>
+                <Button className='mr-3' variant="warning" type="button" onClick={() => {handleProductDelete()}}>
+                    Delete Product
+                </Button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -175,6 +204,8 @@ const Product = () => {
         <div className="row">{loading ? <Loading /> : <ShowProduct />}</div>
         <div className="row my-5 py-5">
           <div className="d-none d-md-block">
+            {user_role === 'client' && (
+            <>
           <h2 className="">You may also Like</h2>
             <Marquee
               pauseOnHover={true}
@@ -182,7 +213,9 @@ const Product = () => {
               speed={50}
             >
               {loading2 ? <Loading2 /> : <ShowSimilarProduct />}
-            </Marquee>
+              </Marquee>
+            </>
+              )}
           </div>
         </div>
       </div>
