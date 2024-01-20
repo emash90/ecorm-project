@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Marquee from "react-fast-marquee";
+import { Image } from "cloudinary-react";
 import { useDispatch, useSelector } from "react-redux";
 import { addCart } from "../redux/action";
 
 import { Footer, Navbar } from "../components";
-import { Button } from "react-bootstrap";
+import { Button, Carousel, Modal, Form, Card } from "react-bootstrap";
 
 const Product = () => {
   const {user } = useSelector((state) => state.Auth);
@@ -17,6 +18,7 @@ const Product = () => {
   const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
 
+  const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -26,14 +28,16 @@ const Product = () => {
 
   useEffect(() => {
     const getProduct = async () => {
+      const url = process.env.REACT_APP_API_GATEWAY_HOST;
       setLoading(true);
       setLoading2(true);
-      const response = await fetch(`http://localhost:5000/product/v1/${id}`);
+      const response = await fetch(`${url}/product/v1/${id}`);
       const data = await response.json();
       setProduct(data);
+      console.log("product", data)
       setLoading(false);
       const response2 = await fetch(
-        `https://fakestoreapi.com/products/category/${data.category}`
+        `http://localhost:5000/product/v1/similar/${data.category}`
       );
       const data2 = await response2.json();
       setSimilarProducts(data2);
@@ -41,12 +45,50 @@ const Product = () => {
     };
     getProduct();
   }, [id]);
-  console.log("product", product)
-  const handleProductEdit = (id) => {
-    console.log("product edit", id)
-    navigate(`/merchant/edit_product/${id}`)
 
+  const [showModal, setShowModal] = useState(false);
+  const [editedProduct, setEditedProduct] = useState({});
+
+  const handleClose = () => setShowModal(false);
+  const handleShow = () => setShowModal(true);
+
+  const handleProductEdit = (id) => {
+    console.log("product id", id);
+    const url = process.env.REACT_APP_API_GATEWAY_HOST;
+    fetch(`${url}/product/v1/${id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("product data", data);
+        setEditedProduct(data);
+        handleShow();
+      });
+  };
+  console.log("edited product", editedProduct);
+
+  const handleSave = () => {
+    const url = process.env.REACT_APP_API_GATEWAY_HOST;
+    fetch(`${url}/product/v1/${editedProduct.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(editedProduct),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        handleClose();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+  
+  const handleDeleteImage = (image) => {
+    console.log("remove this", image)
   }
+
+
 
   const handleProductDelete = () => {
   }
@@ -73,20 +115,20 @@ const Product = () => {
       </>
     );
   };
-
+  console.log("product", product)
   const ShowProduct = () => {
     return (
       <>
         <div className="container my-5 py-2">
           <div className="row">
             <div className="col-md-6 col-sm-12 py-3">
-              <img
-                className="img-fluid"
-                src={product.image}
-                alt={product.title}
-                width="400px"
-                height="400px"
-              />
+              <Carousel>
+               {product.product_images && product.product_images.map((image, index) => (
+                  <Carousel.Item key={index}>
+                    <Image cloudName={cloudName} publicId={image} width="400" crop="scale" />
+                  </Carousel.Item>
+                ))}
+              </Carousel>
             </div>
             <div className="col-md-6 col-md-6 py-5">
               <h4 className="text-uppercase text-muted">{product.category}</h4>
@@ -114,7 +156,7 @@ const Product = () => {
               )}
               {user_role === 'merchant' && (
                 <>
-                <Button className='mr-3' variant="primary" type="button" onClick={() => {handleProductEdit(product.id)}}>
+                <Button className='mr-3' variant="primary" type="button" onClick={() => {handleProductEdit(product._id)}}>
                     Edit Product
                 </Button>
                 <Button className='mr-3' variant="warning" type="button" onClick={() => {handleProductDelete()}}>
@@ -125,6 +167,63 @@ const Product = () => {
             </div>
           </div>
         </div>
+        <Modal show={showModal} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit Product</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group controlId="formBasicName">
+                            <Form.Label>Name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter name"
+                                value={editedProduct.product_name}
+                                onChange={(e) => setEditedProduct({ ...editedProduct, name: e.target.value })}
+                            />
+                        </Form.Group>
+
+                        <Form.Group controlId="formBasicDescription">
+                            <Form.Label>Description</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter description"
+                                value={editedProduct.product_description}
+                                onChange={(e) => setEditedProduct({ ...editedProduct, description: e.target.value })}
+                            />
+                        </Form.Group>
+
+                        <Form.Group controlId="formBasicPrice">
+                            <Form.Label>Price</Form.Label>
+                            <Form.Control
+                                type="number"
+                                placeholder="Enter price"
+                                value={editedProduct.product_price}
+                                onChange={(e) => setEditedProduct({ ...editedProduct, price: e.target.value })}
+                            />
+                        </Form.Group>
+                        <h4>Images</h4>
+                        <div className="d-flex justify-content-center">
+                            {editedProduct.product_images && editedProduct.product_images.map((image, index) => (
+                                <Card key={index} className="m-2" style={{ width: '10rem' }}>
+                                    <Card.Img variant="top" src={image} />
+                                    <Card.Body>
+                                        <Button variant="danger" onClick={()=>handleDeleteImage(image)}>Delete</Button>
+                                    </Card.Body>
+                                </Card>
+                            ))}
+                        </div>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Cancel
+                    </Button>
+                    <Button variant="dark" onClick={handleSave}>
+                        Save
+                    </Button>
+                </Modal.Footer>
+            </Modal>
       </>
     );
   };

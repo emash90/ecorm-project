@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Image } from 'cloudinary-react';
+import { Card, Carousel } from "react-bootstrap";
 
-const ShowMerchantProducts = ({ data }) => {
+
+const ShowMerchantProducts = ({ data, cloudName }) => {
+    const [showModal, setShowModal] = useState(false);
+    const [editedProduct, setEditedProduct] = useState({});
     const navigate = useNavigate();
 
     const productDetails = (product) => {
@@ -24,42 +29,25 @@ const ShowMerchantProducts = ({ data }) => {
 
             {data.map((product) => {
                 return (
-                    <div
-                        id={product._id}
-                        key={product._id}
-                        className="col-md-4 col-sm-6 col-xs-8 col-12 mb-4 d-flex align-items-stretch"
-                        style={{ cursor: "pointer" }}
-                        onClick={() => {
-                            productDetails(product);
-                        }}
-                    >
-                        <div
-                            className="card text-center h-100"
-                            key={product._id}
-                        >
-                            <img
-                                className="card-img-top p-3"
-                                src={product.image}
-                                alt="Card"
-                                height={300}
-                            />
-                            <div className="card-body">
-                                <h5 className="card-title">
-                                    {product.name}
-                                </h5>
-                                <p className="card-text">
-                                    {product.description}
-                                </p>
-                            </div>
-                            <ul className="list-group list-group-flush">
-                                <li className="list-group-item lead">
-                                    $ {product.price}
-                                </li>
-                                {/* <li className="list-group-item">Dapibus ac facilisis in</li>
-                    <li className="list-group-item">Vestibulum at eros</li> */}
-                            </ul>
-                        </div>
-                    </div>
+                    <Card className="col-12 col-md-4 col-lg-3 m-2" key={product.id}>
+                        <Carousel>
+                            {product.image.map((image, index) => (
+                                <Carousel.Item key={index}>
+                                    <Image cloudName={cloudName} publicId={image} width="300" crop="scale" />
+                                </Carousel.Item>
+                            ))}
+                        </Carousel>
+                        <Card.Body style={{cursor: 'pointer'}} onClick={() => productDetails(product)} >
+                            <Card.Title>{product.name}</Card.Title>
+                            <Card.Text>{product.description}</Card.Text>
+                            <Card.Text>$ {product.price}</Card.Text>
+                            <Card.Text className="d-flex justify-content-center">
+                                <button className="btn btn-dark m-1" onClick={() => productDetails(product)}>
+                                    View Product
+                                </button>
+                            </Card.Text>
+                        </Card.Body>
+                    </Card>
                 );
             })}
         </>

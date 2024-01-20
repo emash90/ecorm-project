@@ -17,6 +17,7 @@ const Products = () => {
   const { user } = useSelector((state) => state.Auth);
 
   const dispatch = useDispatch();
+  const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
 
   const addProduct = (product) => {
     dispatch(addCart(product))
@@ -112,10 +113,10 @@ const Products = () => {
                 />
                 <div className="card-body">
                   <h5 className="card-title">
-                    {product.title.substring(0, 12)}...
+                    {product.name}
                   </h5>
                   <p className="card-text">
-                    {product.description.substring(0, 90)}...
+                    {product.description}
                   </p>
                 </div>
                 <ul className="list-group list-group-flush">
@@ -165,7 +166,7 @@ const Products = () => {
               </>
               )}
         <div className="row justify-content-center">
-          {loading ? <Loading /> : user && user.role === 'merchant' ? <ShowMerchantProducts data={data} /> : <ShowProducts />}
+          {loading ? <Loading /> : user && user.role === 'merchant' ? <ShowMerchantProducts cloudName={cloudName} data={data} /> : <ShowProducts />}
         </div>
       </div>
     </>

@@ -13,7 +13,7 @@ const add_product = async (req, res) => {
         product_price: data.product_price,
         product_category: data.product_category,
         product_subcategory: data.product_subcategory,
-        product_image: data.product_image,
+        product_images: data.product_images,
         product_quantity: data.product_quantity
     });
     try {
@@ -62,7 +62,7 @@ const get_all_products = async (req, res) => {
                     description: product.product_description,
                     category: product.product_category,
                     subcategory: product.product_subcategory,
-                    image: product.product_image,
+                    image: product.product_images,
                     quantity: product.product_quantity
                 }
             })

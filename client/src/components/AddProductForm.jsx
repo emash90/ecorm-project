@@ -1,20 +1,22 @@
 import React, { useState } from 'react'
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { Image } from 'cloudinary-react';
 
 const AddProductForm = () => {
     const navigate = useNavigate();
+    const [imagePreview, setImagePreview] = useState([])
     const [product_details, setProductDetails] = useState({
         product_name: '',
         product_description: '',
         product_price: '',
-        product_image: '',
+        product_images: [],
         product_category: '',
         product_subcategory: '',
         product_quantity: ''
     })
 
-    const {product_name, product_description, product_price, product_image, product_category, product_subcategory, product_quantity} = product_details;
+    const {product_name, product_description, product_price, product_images, product_category, product_subcategory, product_quantity} = product_details;
 
     const handleInput = (e) => {
         const {name, value} = e.target;
@@ -27,12 +29,48 @@ const AddProductForm = () => {
             product_name: '',
             product_description: '',
             product_price: '',
-            product_image: '',
+            product_images: [],
             product_category: '',
             product_subcategory: '',
             product_quantity: ''
         })
     }
+
+    //////////////upload product image to cloudinary
+
+    const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
+    const uploadImage = async (e) => {
+        e.preventDefault();
+        console.log("cloudName", cloudName)
+        const files = e.target.files;
+        const data = new FormData();
+        data.append('file', files[0]);
+        data.append('upload_preset', 'product_images');
+    
+        try {
+            const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+                method: 'POST',
+                body: data,
+            });
+    
+            const file = await res.json();
+            console.log(file);
+            console.log("file url", file.secure_url)
+            // Check if the image URL already exists in the imagePreview array
+            if (imagePreview.includes(file.secure_url)) {
+                console.error('Error: Similar image has already been uploaded.');
+                // Handle the error as needed, such as displaying an error message to the user
+            } else {
+                setImagePreview((prevImages) => [...prevImages, file.secure_url]);
+                setProductDetails({ ...product_details, product_images: [...product_images, file.secure_url] });
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    console.log("image preview", imagePreview)
+    
+    
 
     const handleAddProduct = (e) => {
         e.preventDefault()
@@ -41,9 +79,10 @@ const AddProductForm = () => {
             alert("Please fill all the fields")
             return
         }
+        const url = process.env.REACT_APP_API_GATEWAY_HOST + '/product/v1/add'
         try {
             /////post product details to the backend
-            fetch("http://localhost:5000/product/v1/add", {
+            fetch(url, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -85,8 +124,17 @@ const AddProductForm = () => {
     </Form.Group>
     <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Upload Product Image</Form.Label>
-        <Form.Control type="file" placeholder="Enter product image" name='product_image' value={product_image} onChange={handleInput} />
+        <Form.Control type="file" placeholder="Enter product image" name='product_image' onChange={uploadImage} />
     </Form.Group>
+    <div className="text-center" style={{ fontSize: '20px' }}>
+                {imagePreview.length > 0 &&
+                    imagePreview.map((image, index) => (
+                        <React.Fragment key={index}>
+                            {index > 0 && index % 4 === 0 && <br />} {/* Start a new row after every 4 images */}
+                            <Image cloudName={cloudName} publicId={image} width="150" crop="scale" />
+                        </React.Fragment>
+                    ))}
+            </div>
     <Form.Text className="text-muted"> product category and sub-category </Form.Text>
     <div className="mb-3 text-center d-flex justify-content-between align-items-center flex-wrap flex-md-nowrap">
         <Form.Select aria-label="Default select example" name='product_category' value={product_category} onChange={handleInput}>

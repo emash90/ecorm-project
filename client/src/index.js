@@ -20,6 +20,7 @@ root.render(
         <Route path="/" element={<Home />} />
         <Route path="/merchant" element={<Products />} />
         <Route path="/merchant/add_product" element={<AddProduct />} />
+        <Route path="/merchant/edit_product/:id" element={<AddProduct />} />
         <Route path="/product" element={<Products />} />
         <Route path="/product/:id" element={<Product />} />
         <Route path="/about" element={<AboutPage />} />
