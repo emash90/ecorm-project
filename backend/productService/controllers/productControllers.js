@@ -50,6 +50,17 @@ const get_product = async (req, res) => {
     }
 }
 
+const get_similar_products = async (req, res) => {
+    const { category } = req.body;
+    try {
+        const resp = await Product.find({ product_category: category });
+        console.log("resp", resp);
+    } catch (error) {
+        console.log(error);
+    }
+}
+    
+
 const get_all_products = async (req, res) => {
     try {
         const products = await Product.find();
@@ -72,10 +83,23 @@ const get_all_products = async (req, res) => {
     }
 }
 
+const delete_product = async (req, res) => {
+    console.log(req.body);
+    const { id } = req.body
+    try {
+        const product = await Product.findByIdAndDelete(id);
+        res.status(200).json({ message: "Product deleted successfully" });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 
 module.exports = {
     add_product,
     get_all_products,
     edit_product,
-    get_product
+    get_product,
+    delete_product,
+    get_similar_products
 }

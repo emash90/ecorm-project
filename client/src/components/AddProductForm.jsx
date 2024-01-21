@@ -2,8 +2,10 @@ import React, { useState } from 'react'
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { Image } from 'cloudinary-react';
+import { useSelector } from 'react-redux';
 
 const AddProductForm = () => {
+    const user = useSelector((state) => state.Auth.user)
     const navigate = useNavigate();
     const [imagePreview, setImagePreview] = useState([])
     const [product_details, setProductDetails] = useState({
@@ -39,13 +41,14 @@ const AddProductForm = () => {
     //////////////upload product image to cloudinary
 
     const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
+    const uploadPreset = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET;
     const uploadImage = async (e) => {
         e.preventDefault();
         console.log("cloudName", cloudName)
         const files = e.target.files;
         const data = new FormData();
         data.append('file', files[0]);
-        data.append('upload_preset', 'product_images');
+        data.append('upload_preset', uploadPreset);
     
         try {
             const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
@@ -79,6 +82,7 @@ const AddProductForm = () => {
             alert("Please fill all the fields")
             return
         }
+        product_details.session_id = user.session_id;
         const url = process.env.REACT_APP_API_GATEWAY_HOST + '/product/v1/add'
         try {
             /////post product details to the backend

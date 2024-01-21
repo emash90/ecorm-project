@@ -4,7 +4,8 @@ import { Image } from 'cloudinary-react';
 import { Card, Carousel } from "react-bootstrap";
 
 
-const ShowMerchantProducts = ({ data, cloudName }) => {
+const ShowMerchantProducts = ({ data, cloudName, uploadPreset }) => {
+    console.log("cloudName", cloudName, "uploadPreset", uploadPreset);
     const [showModal, setShowModal] = useState(false);
     const [editedProduct, setEditedProduct] = useState({});
     const navigate = useNavigate();

@@ -9,15 +9,13 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { Link } from "react-router-dom";
 import ShowMerchantProducts from "./ShowMerchantProducts";
 
-const Products = () => {
+const Products = ({ uploadPreset, cloudName, user }) => {
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState(data);
   const [loading, setLoading] = useState(false);
   let componentMounted = true;
-  const { user } = useSelector((state) => state.Auth);
 
   const dispatch = useDispatch();
-  const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
 
   const addProduct = (product) => {
     dispatch(addCart(product))
@@ -134,7 +132,6 @@ const Products = () => {
                 </div>
               </div>
             </div>
-
           );
         })}
       </>
@@ -166,7 +163,7 @@ const Products = () => {
               </>
               )}
         <div className="row justify-content-center">
-          {loading ? <Loading /> : user && user.role === 'merchant' ? <ShowMerchantProducts cloudName={cloudName} data={data} /> : <ShowProducts />}
+          {loading ? <Loading /> : user && user.role === 'merchant' ? <ShowMerchantProducts uploadPreset={uploadPreset} cloudName={cloudName} data={data} /> : <ShowProducts />}
         </div>
       </div>
     </>
