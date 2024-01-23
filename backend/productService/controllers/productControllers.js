@@ -25,19 +25,23 @@ const add_product = async (req, res) => {
 }
 
 const edit_product = async (req, res) => {
-    const { id } = req.params;
-    const { name, price, description } = req.body;
+    const { _id, product_name, product_description, product_price, product_category, product_subcategory, product_images, product_quantity } = req.body;
     try {
-        const product = await Product.findById(id);
-        product.name = name;
-        product.price = price;
-        product.description = description;
-        await product.save();
-        res.status(200).send(product);
+        const product_to_edit = await Product.findById(_id);
+        product_to_edit.product_name = product_name;
+        product_to_edit.product_description = product_description;
+        product_to_edit.product_price = product_price;
+        product_to_edit.product_category = product_category;
+        product_to_edit.product_subcategory = product_subcategory;
+        product_to_edit.product_images = product_images;
+        product_to_edit.product_quantity = product_quantity;
+        await product_to_edit.save();
+        res.status(200).json({ product: product_to_edit, message: "Product edited successfully" });
     } catch (error) {
         console.log(error);
     }
 }
+    
 
 
 const get_product = async (req, res) => {

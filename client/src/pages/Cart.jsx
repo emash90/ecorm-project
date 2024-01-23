@@ -35,7 +35,7 @@ const Cart = () => {
     let shipping = 30.0;
     let totalItems = 0;
     state.map((item) => {
-      return (subtotal += item.price * item.qty);
+      return (subtotal += item.product_price * item.qty);
     });
 
     state.map((item) => {
