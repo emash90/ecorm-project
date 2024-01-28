@@ -99,7 +99,7 @@ const Products = ({ uploadPreset, cloudName, user }) => {
               </>
               )}
         <div className="row justify-content-center">
-          {loading ? <Loading /> : user && user.role === 'merchant' ? <ShowMerchantProducts uploadPreset={uploadPreset} cloudName={cloudName} data={data} /> : <ShowProducts data={data} filter={filter} filterProduct={filterProduct} addProduct={addProduct} />}
+          {loading ? <Loading /> : user && user.role === 'merchant' ? <ShowMerchantProducts uploadPreset={uploadPreset} cloudName={cloudName} data={data} /> : <ShowProducts data={data} filter={filter} filterProduct={filterProduct} addProduct={addProduct} uploadPreset={uploadPreset} cloudName={cloudName} />}
         </div>
       </div>
     </>

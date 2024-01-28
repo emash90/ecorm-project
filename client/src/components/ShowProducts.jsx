@@ -1,8 +1,10 @@
 import React from 'react'
-import { Nav, NavDropdown } from "react-bootstrap";
+import { Carousel, Nav, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { Image } from "cloudinary-react";
 
-const ShowProducts = ({ filterProduct, filter, addProduct, setFilter, data }) => {
+const ShowProducts = ({ filterProduct, cloudName,  filter, addProduct, setFilter, data }) => {
+
   return (
     <>
     <Nav className="justify-content-center" activeKey="/home">
@@ -33,12 +35,24 @@ const ShowProducts = ({ filterProduct, filter, addProduct, setFilter, data }) =>
       return (
         <div id={product.id} key={product.id} className="col-md-4 col-sm-6 col-xs-8 col-12 mb-4">
           <div className="card text-center h-100" key={product.id}>
-            <img
-              className="card-img-top p-3"
-              src={product.image}
-              alt="Card"
-              height={300}
-            />
+            <div className='card-img-top'>
+              {cloudName && product.image && (
+                <Carousel>
+                  {product.image.map((image) => {
+                    return (
+                      <Carousel.Item key={image}>
+                        <Image
+                          cloudName={cloudName}
+                          publicId={image}
+                          width="300"
+                          crop="scale"
+                        />
+                      </Carousel.Item>
+                    );
+                  })}
+                </Carousel>
+              )}
+            </div>
             <div className="card-body">
               <h5 className="card-title">
                 {product.name}

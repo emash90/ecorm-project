@@ -53,6 +53,7 @@ const Product = () => {
       }
     };
     getProduct();
+    window.scrollTo(0, 0);
   }, [id, productToSave]);
 
   const addProduct = (product) => {
