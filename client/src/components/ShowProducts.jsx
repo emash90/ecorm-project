@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Image } from "cloudinary-react";
 
 const ShowProducts = ({ filterProduct, cloudName,  filter, addProduct, setFilter, data }) => {
-
+  console.log("filter", filter)
   return (
     <>
     <Nav className="justify-content-center" activeKey="/home">
@@ -70,9 +70,9 @@ const ShowProducts = ({ filterProduct, cloudName,  filter, addProduct, setFilter
               <Link to={"/product/" + product.id} className="btn btn-dark m-1">
                 Buy Now
               </Link>
-              <button className="btn btn-dark m-1" onClick={() => addProduct(product)}>
+              {/* <button className="btn btn-dark m-1" onClick={() => addProduct(product)}>
                 Add to Cart
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

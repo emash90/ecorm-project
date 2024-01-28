@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addCart } from "../redux/action";
 
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 import ShowMerchantProducts from "./ShowMerchantProducts";
 import ShowProducts from "./ShowProducts";
+import { useCartStore } from "../store/store";
 
-const Products = ({ uploadPreset, cloudName, user }) => {
+const Products = ({ uploadPreset, cloudName, loggedInUser }) => {
+  const {  addToCart } = useCartStore();
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState(data);
   const [loading, setLoading] = useState(false);
   let componentMounted = true;
 
-  const dispatch = useDispatch();
 
   const addProduct = (product) => {
-    console.log("add product called", product);
-    dispatch(addCart(product))
+    console.log("product ===>", product)
+    addToCart(product);
   }
 
   useEffect(() => {
@@ -78,7 +77,7 @@ const Products = ({ uploadPreset, cloudName, user }) => {
   return (
     <>
       <div className="container my-3 py-3">
-      {user && user.role === 'client' && (
+      {loggedInUser && loggedInUser.role === 'client' && (
         <>
                 <div className="row">
                 <div className="col-12">
@@ -88,7 +87,7 @@ const Products = ({ uploadPreset, cloudName, user }) => {
               </div>
               </>
               )}
-      {user && user.role === 'merchant' && (
+      {loggedInUser && loggedInUser.role === 'merchant' && (
         <>
                 <div className="row">
                 <div className="col-12">
@@ -99,7 +98,7 @@ const Products = ({ uploadPreset, cloudName, user }) => {
               </>
               )}
         <div className="row justify-content-center">
-          {loading ? <Loading /> : user && user.role === 'merchant' ? <ShowMerchantProducts uploadPreset={uploadPreset} cloudName={cloudName} data={data} /> : <ShowProducts data={data} filter={filter} filterProduct={filterProduct} addProduct={addProduct} uploadPreset={uploadPreset} cloudName={cloudName} />}
+          {loading ? <Loading /> : loggedInUser && loggedInUser.role === 'merchant' ? <ShowMerchantProducts uploadPreset={uploadPreset} cloudName={cloudName} data={data} /> : <ShowProducts data={data} filter={filter} filterProduct={filterProduct} addProduct={addProduct} uploadPreset={uploadPreset} cloudName={cloudName} />}
         </div>
       </div>
     </>

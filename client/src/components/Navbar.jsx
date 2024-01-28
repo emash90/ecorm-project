@@ -1,19 +1,17 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 import { NavDropdown } from 'react-bootstrap';
-import { userLogout } from '../redux/action/userActions';
+import { useCartStore, useUserStore } from '../store/store';
 
 const Navbar = () => {
-    const { user } = useSelector((state) => state.Auth);
-    const state = useSelector((state) => state.handleCart);
+    const { loggedInUser, logout  } = useUserStore();
+    const { cart } = useCartStore();
 
-    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        dispatch(userLogout());
-        navigate('/login');
+        // TODO: 'handle logout'
+        logout();
     }
 
 
@@ -34,7 +32,7 @@ const Navbar = () => {
                 >
                     <span className="navbar-toggler-icon"></span>
                 </button>
-                { user && user.role === 'merchant' && (
+                { loggedInUser && loggedInUser.role === 'merchant' && (
                     <>
                         <div className="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul className="navbar-nav m-auto my-2 text-center">
@@ -62,7 +60,7 @@ const Navbar = () => {
                         </div>
                     </> 
                     )}
-                { user && user.role === 'client' && (
+                { loggedInUser && loggedInUser.role === 'client' && (
                     <>
                         <div className="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul className="navbar-nav m-auto my-2 text-center">
@@ -93,9 +91,9 @@ const Navbar = () => {
                 <div className="d-flex">
                     <div className="buttons text-center">
                         <NavLink to="/cart" className="btn btn-outline-dark m-2">
-                            <i className="fa fa-cart-shopping mr-1"></i> Cart ({state.length})
+                            <i className="fa fa-cart-shopping mr-1"></i> Cart ({cart.length})
                         </NavLink>
-                        {!user ? (
+                        {!loggedInUser ? (
                             <>
                                 <NavLink to="/login" className="btn btn-outline-dark m-2">
                                     <i className="fa fa-user mr-1"></i> Login
@@ -108,7 +106,7 @@ const Navbar = () => {
                             <>
                                 <NavLink to="/profile" className="btn btn-outline-dark m-1">
                                     <i className="fa fa-user mr-2"></i>
-                                    <NavDropdown title={user.name} id="basic-nav-dropdown">
+                                    <NavDropdown title={loggedInUser.name} id="basic-nav-dropdown">
                                         <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
                                         <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
                                     </NavDropdown>

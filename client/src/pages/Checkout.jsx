@@ -2,8 +2,9 @@ import React from "react";
 import { Footer, Navbar } from "../components";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { useCartStore } from "../store/store";
 const Checkout = () => {
-  const state = useSelector((state) => state.handleCart);
+  const { cart } = useCartStore();
 
   const EmptyCart = () => {
     return (
@@ -24,12 +25,12 @@ const Checkout = () => {
     let subtotal = 0;
     let shipping = 30.0;
     let totalItems = 0;
-    state.map((item) => {
-      return (subtotal += item.price * item.qty);
+    cart.map((item) => {
+      return (subtotal += item.product_price * item.quantity);
     });
 
-    state.map((item) => {
-      return (totalItems += item.qty);
+    cart.map((item) => {
+      return (totalItems += item.quantity);
     });
     return (
       <>
@@ -288,7 +289,7 @@ const Checkout = () => {
       <div className="container my-3 py-3">
         <h1 className="text-center">Checkout</h1>
         <hr />
-        {state.length ? <ShowCheckout /> : <EmptyCart />}
+        {cart.length ? <ShowCheckout /> : <EmptyCart />}
       </div>
       <Footer />
     </>

@@ -17,6 +17,7 @@ const ShowProduct = ({ product, userRole, addProduct, handleProductEdit, handleP
               </Carousel.Item>
             ))}
           </Carousel>
+          <div className="vertical-line"></div>
         </div>
         <div className="col-md-6 col-md-6 py-5">
           <h4 className="text-uppercase text-muted">{product.category}</h4>
@@ -29,7 +30,7 @@ const ShowProduct = ({ product, userRole, addProduct, handleProductEdit, handleP
           )}
           <h3 className="display-6  my-4">${product.product_price}</h3>
           <p className="lead">{product.product_description}</p>
-          {userRole === 'client' || userRole === null && (
+          {(userRole === 'client' || userRole == null )&& (
             <>
               <button
                 className="btn btn-outline-dark"
@@ -39,6 +40,9 @@ const ShowProduct = ({ product, userRole, addProduct, handleProductEdit, handleP
               </button>
               <Link to="/cart" className="btn btn-dark mx-3">
                 Go to Cart
+              </Link>
+              <Link to="/" className="btn btn-outline-dark mx-3">
+                Continue Shopping
               </Link>
             </>
           )}

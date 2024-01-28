@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { addCart } from "../redux/action";
 import { Footer, Navbar } from "../components";
 import { Loading2, ShowProduct, ShowSimilarProduct } from "../components";
 import Marquee from "react-fast-marquee";
 import { Modal, Button, Form } from "react-bootstrap";
 import { Image } from "cloudinary-react";
+import { useCartStore, useUserStore } from "../store/store";
 
 const Product = () => {
-  const { user } = useSelector((state) => state.Auth);
-  const userRole = user ? user.role : null;
+  const { loggedInUser } = useUserStore();
+  const { cart, addToCart, removeFromCart, clearCart } = useCartStore();
+  const userRole = loggedInUser && loggedInUser.role;
   const { id } = useParams();
   const [product, setProduct] = useState([]);
   const [similarProducts, setSimilarProducts] = useState([]);
@@ -26,7 +26,6 @@ const Product = () => {
   const showModal = () => setShow(true);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   useEffect(() => {
     const getProduct = async () => {
@@ -41,7 +40,7 @@ const Product = () => {
         setLoading(false);
 
         const response2 = await fetch(
-          `http://localhost:5000/product/v1/similar/${data.category}`
+          `${url}/product/v1/similar_products/${data.category}`
         );
         const data2 = await response2.json();
         setSimilarProducts(data2);
@@ -58,7 +57,7 @@ const Product = () => {
 
   const addProduct = (product) => {
     console.log("add product called", product);
-    dispatch(addCart(product))
+    addToCart(product);
   }
 
   const handleProductEdit = (id) => {
