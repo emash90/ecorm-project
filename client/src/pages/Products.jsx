@@ -1,13 +1,15 @@
 import React from 'react'
 import { Footer, Navbar, Product } from "../components"
-import { useSelector } from 'react-redux'
+import { useUserStore } from '../store/store';
 
 const Products = () => {
-  const {user} = useSelector((state) => state.Auth)
+  const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
+  const uploadPreset = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET;
+  const {loggedInUser} = useUserStore();
   return (
     <>
       <Navbar />
-      <Product  />
+      <Product cloudName={cloudName} uploadPreset={uploadPreset} loggedInUser={loggedInUser}  />
       <Footer />
     </>
   )

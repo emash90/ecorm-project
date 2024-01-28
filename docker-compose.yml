@@ -55,8 +55,11 @@ services:
       - productService
     environment:
       - AUTH_SERVICE_HOST=authService
+      - AUTH_SERVICE_PORT=4000
       - PRODUCT_SERVICE_HOST=productService
+      - PRODUCT_SERVICE_PORT=5001
       - ORDER_SERVICE_HOST=orderService
+      - ORDER_SERVICE_PORT=5002
     command: ["npm", "run", "dev"]
   productService:
     build: ./backend/productService
@@ -112,6 +115,7 @@ services:
       - REACT_APP_API_GATEWAY_HOST=${API_GATEWAY_HOST}
       - REACT_APP_API_GATEWAY_PORT=5000
       - REACT_APP_CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - REACT_APP_CLOUDINARY_UPLOAD_PRESET=${CLOUDINARY_UPLOAD_PRESET}
     command: ["npm", "start"]
 
 volumes:

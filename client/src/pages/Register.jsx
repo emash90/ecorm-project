@@ -1,7 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Footer, Navbar } from "../components";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useUserStore } from '../store/store';
 const Register = () => {
+    const { loggedInUser, setLoggedInUser } = useUserStore();
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: "",
         email: "",
@@ -18,7 +21,7 @@ const Register = () => {
     }
 
 
-    const handleRegister = (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault()
         console.log("form data", formData)
         if (!username || !email || !password) {
@@ -29,24 +32,40 @@ const Register = () => {
             alert("Password does not match")
             return
         }
-
-        /////////////////////////get the data from the backend
-        fetch("http://localhost:5000/auth/v1/register", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({username, email, password, user_type})
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data)
-        })
-        .catch(err => console.log(err))
+        try {
+            const url = `${process.env.REACT_APP_API_GATEWAY_HOST}/auth/v1/register`
+            const options = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            }
+            const response = await fetch(url, options)
+            console.log("response", response)
+            if (response.status === 201) {
+                const data = await response.json()
+                console.log("data", data)
+                setLoggedInUser(data)
+                alert("Registration Successful")
+            }
+        } catch (error) {
+            console.log("error", error)
+            
+        }
     }
 
-
-
+    useEffect(() => {
+        if (loggedInUser && loggedInUser.role === 'client') {
+            navigate('/')
+        } else if (loggedInUser && loggedInUser.role === 'merchant') {
+            navigate('/merchant')
+        } else if (loggedInUser && loggedInUser.role === 'admin') {
+            navigate('/admin')
+        } else {
+            navigate('/register')
+        }
+    }, [loggedInUser])
 
     return (
         <>

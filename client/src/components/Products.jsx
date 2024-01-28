@@ -1,26 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addCart } from "../redux/action";
-import { Nav, NavDropdown } from "react-bootstrap";
 
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-import { Link } from "react-router-dom";
 import ShowMerchantProducts from "./ShowMerchantProducts";
+import ShowProducts from "./ShowProducts";
+import { useCartStore } from "../store/store";
+import { useNavigate } from "react-router-dom";
 
-const Products = () => {
+const Products = ({ uploadPreset, cloudName, loggedInUser }) => {
+  const navigate = useNavigate();
+  const {  addToCart } = useCartStore();
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState(data);
   const [loading, setLoading] = useState(false);
   let componentMounted = true;
-  const { user } = useSelector((state) => state.Auth);
 
-  const dispatch = useDispatch();
-  const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
+  const navigateToProduct = (id) => {
+    navigate(`/product/${id}`);
+  }
+
 
   const addProduct = (product) => {
-    dispatch(addCart(product))
+    console.log("product ===>", product)
+    addToCart(product);
   }
 
   useEffect(() => {
@@ -74,78 +77,13 @@ const Products = () => {
     const updatedList = data.filter((item) => item.category === cat);
     setFilter(updatedList);
   }
-  const ShowProducts = () => {
-    return (
-      <>
-        <Nav className="justify-content-center" activeKey="/home">
-          <Nav.Item>
-            <Nav.Link href="/home">All</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <NavDropdown title="Face Products" id="nav-dropdown">
-              <NavDropdown.Item onClick={() => setFilter(data)} >All</NavDropdown.Item>
-              <NavDropdown.Item onClick={()=> (filterProduct("jewelery"))}>Face Wash</NavDropdown.Item>
-              <NavDropdown.Item onClick={()=> (filterProduct("men's clothing"))}>Face Cream</NavDropdown.Item>
-              <NavDropdown.Item onClick={()=> (filterProduct("jewelery"))}>Face Mask</NavDropdown.Item>
-              <NavDropdown.Item onClick={()=> (filterProduct("jewelery"))}>Face Scrub</NavDropdown.Item>
-              <NavDropdown.Item onClick={()=> (filterProduct("jewelery"))}>Face Serum</NavDropdown.Item>
-              <NavDropdown.Item onClick={()=> (filterProduct("jewelery"))}>Face Toner</NavDropdown.Item>
-            </NavDropdown >
-          </Nav.Item>
-          <Nav.Item>
-            <NavDropdown title="Hair Products" id="nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Shampoo</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">Conditioner</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Hair Oil</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Hair Serum</NavDropdown.Item>
-            </NavDropdown>
-          </Nav.Item>
-        </Nav>
-        {filter.map((product) => {
-          return (
-            <div id={product.id} key={product.id} className="col-md-4 col-sm-6 col-xs-8 col-12 mb-4">
-              <div className="card text-center h-100" key={product.id}>
-                <img
-                  className="card-img-top p-3"
-                  src={product.image}
-                  alt="Card"
-                  height={300}
-                />
-                <div className="card-body">
-                  <h5 className="card-title">
-                    {product.name}
-                  </h5>
-                  <p className="card-text">
-                    {product.description}
-                  </p>
-                </div>
-                <ul className="list-group list-group-flush">
-                  <li className="list-group-item lead">$ {product.price}</li>
-                  {/* <li className="list-group-item">Dapibus ac facilisis in</li>
-                    <li className="list-group-item">Vestibulum at eros</li> */}
-                </ul>
-                <div className="card-body">
-                  <Link to={"/product/" + product.id} className="btn btn-dark m-1">
-                    Buy Now
-                  </Link>
-                  <button className="btn btn-dark m-1" onClick={() => addProduct(product)}>
-                    Add to Cart
-                  </button>
-                </div>
-              </div>
-            </div>
 
-          );
-        })}
-      </>
-    );
-  };
 
  
   return (
     <>
       <div className="container my-3 py-3">
-      {user && user.role === 'client' && (
+      {loggedInUser && loggedInUser.role === 'client' && (
         <>
                 <div className="row">
                 <div className="col-12">
@@ -155,7 +93,7 @@ const Products = () => {
               </div>
               </>
               )}
-      {user && user.role === 'merchant' && (
+      {loggedInUser && loggedInUser.role === 'merchant' && (
         <>
                 <div className="row">
                 <div className="col-12">
@@ -166,7 +104,7 @@ const Products = () => {
               </>
               )}
         <div className="row justify-content-center">
-          {loading ? <Loading /> : user && user.role === 'merchant' ? <ShowMerchantProducts cloudName={cloudName} data={data} /> : <ShowProducts />}
+          {loading ? <Loading /> : loggedInUser && loggedInUser.role === 'merchant' ? <ShowMerchantProducts uploadPreset={uploadPreset} cloudName={cloudName} data={data} /> : <ShowProducts data={data} filter={filter} filterProduct={filterProduct} addProduct={addProduct} uploadPreset={uploadPreset} cloudName={cloudName} navigateToProduct={navigateToProduct} />}
         </div>
       </div>
     </>
