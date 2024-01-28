@@ -3,7 +3,7 @@ import { Carousel, Nav, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Image } from "cloudinary-react";
 
-const ShowProducts = ({ filterProduct, cloudName,  filter, addProduct, setFilter, data }) => {
+const ShowProducts = ({ filterProduct, cloudName,  filter, navigateToProduct, setFilter, data }) => {
   console.log("filter", filter)
   return (
     <>
@@ -34,7 +34,7 @@ const ShowProducts = ({ filterProduct, cloudName,  filter, addProduct, setFilter
     {filter.map((product) => {
       return (
         <div id={product.id} key={product.id} className="col-md-4 col-sm-6 col-xs-8 col-12 mb-4">
-          <div className="card text-center h-100" key={product.id}>
+          <div className="card text-center h-100" key={product.id} style={{ cursor: "pointer" }} onClick={() => navigateToProduct(product.id)}>
             <div className='card-img-top'>
               {cloudName && product.image && (
                 <Carousel>

@@ -6,13 +6,19 @@ import "react-loading-skeleton/dist/skeleton.css";
 import ShowMerchantProducts from "./ShowMerchantProducts";
 import ShowProducts from "./ShowProducts";
 import { useCartStore } from "../store/store";
+import { useNavigate } from "react-router-dom";
 
 const Products = ({ uploadPreset, cloudName, loggedInUser }) => {
+  const navigate = useNavigate();
   const {  addToCart } = useCartStore();
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState(data);
   const [loading, setLoading] = useState(false);
   let componentMounted = true;
+
+  const navigateToProduct = (id) => {
+    navigate(`/product/${id}`);
+  }
 
 
   const addProduct = (product) => {
@@ -98,7 +104,7 @@ const Products = ({ uploadPreset, cloudName, loggedInUser }) => {
               </>
               )}
         <div className="row justify-content-center">
-          {loading ? <Loading /> : loggedInUser && loggedInUser.role === 'merchant' ? <ShowMerchantProducts uploadPreset={uploadPreset} cloudName={cloudName} data={data} /> : <ShowProducts data={data} filter={filter} filterProduct={filterProduct} addProduct={addProduct} uploadPreset={uploadPreset} cloudName={cloudName} />}
+          {loading ? <Loading /> : loggedInUser && loggedInUser.role === 'merchant' ? <ShowMerchantProducts uploadPreset={uploadPreset} cloudName={cloudName} data={data} /> : <ShowProducts data={data} filter={filter} filterProduct={filterProduct} addProduct={addProduct} uploadPreset={uploadPreset} cloudName={cloudName} navigateToProduct={navigateToProduct} />}
         </div>
       </div>
     </>

@@ -3,9 +3,10 @@ import { Button, Form, InputGroup } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { Image } from 'cloudinary-react';
 import { useSelector } from 'react-redux';
+import { useUserStore } from '../store/store';
 
 const AddProductForm = () => {
-    const user = useSelector((state) => state.Auth.user)
+    const { loggedInUser } = useUserStore();
     const navigate = useNavigate();
     const [imagePreview, setImagePreview] = useState([])
     const [product_details, setProductDetails] = useState({
@@ -71,7 +72,6 @@ const AddProductForm = () => {
             console.log(err);
         }
     };
-    console.log("image preview", imagePreview)
     
     
 
@@ -82,7 +82,7 @@ const AddProductForm = () => {
             alert("Please fill all the fields")
             return
         }
-        product_details.session_id = user.session_id;
+        product_details.session_id = loggedInUser.session_id;
         const url = process.env.REACT_APP_API_GATEWAY_HOST + '/product/v1/add'
         try {
             /////post product details to the backend
@@ -136,6 +136,18 @@ const AddProductForm = () => {
                         <React.Fragment key={index}>
                             {index > 0 && index % 4 === 0 && <br />} {/* Start a new row after every 4 images */}
                             <Image cloudName={cloudName} publicId={image} width="150" crop="scale" />
+                            {/* add x to remove an unwanted image */}
+                            <span
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => {
+                                    setImagePreview(imagePreview.filter((img) => img !== image));
+                                    setProductDetails({ ...product_details, product_images: product_images.filter((img) => img !== image) });
+                                }}
+                            >
+                                {' '}
+                                x
+                            </span>{' '}
+                            
                         </React.Fragment>
                     ))}
             </div>
