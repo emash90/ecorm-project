@@ -16,8 +16,6 @@ services:
   authService:
     build: ./backend/authservice
     image: authservicecontainer
-    ports:
-      - "4000:4000"
     volumes:
       - ./backend/authservice:/app
       - /app/node_modules
