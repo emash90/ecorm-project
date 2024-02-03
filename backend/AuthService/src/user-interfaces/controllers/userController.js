@@ -6,13 +6,13 @@ const makeUserController = ({ loginUserUseCase, registerUserUseCase, userPresent
                 const user = await loginUserUseCase({password, email });
                 userPresenter.success(res, user);
             } catch (error) {
-                userPresenter.error(error);
+                userPresenter.error(res, error);
             }
         },
         registerUser: async (req, res) => {
             try {
-                const { name, email, password } = req.body;
-                const user = await registerUserUseCase({ name, password, email });
+                const { last_name, first_name, email, user_type, password } = req.body;
+                const user = await registerUserUseCase({ last_name, first_name, user_type, password, email });
                 userPresenter.created(res, user);
             } catch (error) {
                 userPresenter.error(res, error);

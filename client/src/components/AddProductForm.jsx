@@ -83,7 +83,7 @@ const AddProductForm = () => {
             return
         }
         product_details.session_id = loggedInUser.session_id;
-        const url = process.env.REACT_APP_API_GATEWAY_HOST + '/product/v1/add'
+        const url = process.env.REACT_APP_API_GATEWAY_HOST + '/api/v1/product'
         try {
             /////post product details to the backend
             fetch(url, {

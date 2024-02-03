@@ -40,10 +40,11 @@ const handleMicroserviceRequest = async (serviceName, req, res) => {
 
   try {
     const response = await axios({ url, method, data });
+    console.log("response", response.data)
     res.status(response.status).send(response.data);
   } catch (error) {
-    console.error(error);
-    res.status(error.response ? error.response.status : 500).send(error.response ? error.response.data : 'Internal Server Error');
+    console.error("error ===>", error.response.data);
+    res.status(error.response ? error.response.status : 500).json(error.response ? error.response.data : { message: 'Internal server error' });
   }
 };
 
