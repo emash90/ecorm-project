@@ -62,8 +62,6 @@ services:
   productService:
     build: ./backend/productService
     image: productservicecontainer
-    ports:
-      - "5001:5001"
     volumes:
       - ./backend/productservice:/app
       - /app/node_modules
@@ -79,6 +77,7 @@ services:
       - MONGO_DB=product
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - PORT=5001
     command: ["npm", "run", "dev"]
   orderService:
     build: ./backend/orderService
