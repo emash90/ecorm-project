@@ -5,6 +5,7 @@ const MONGODB_PORT = process.env.MONGO_PORT || 27017;
 const MONGO_HOST = process.env.MONGO_HOST || 'localhost';
 const REDIS_HOST = process.env.REDIS_HOST || 'localhost';
 const REDIS_PORT = process.env.REDIS_PORT || 6379;
+const PORT = process.env.PORT || 3000;
 
 
 
@@ -15,5 +16,6 @@ module.exports = {
     MONGO_HOST,
     REDIS_HOST,
     REDIS_PORT,
-    MONGODB_PORT
+    MONGODB_PORT,
+    PORT
 };

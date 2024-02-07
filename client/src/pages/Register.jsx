@@ -2,18 +2,20 @@ import React, { useEffect, useState } from 'react'
 import { Footer, Navbar } from "../components";
 import { Link, useNavigate } from 'react-router-dom';
 import { useUserStore } from '../store/store';
+import { registerUser } from '../apiCalls/apiCalls';
 const Register = () => {
     const { loggedInUser, setLoggedInUser } = useUserStore();
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        username: "",
+        first_name: "",
+        last_name: "",
         email: "",
         password: "",
         confirm_password: "",
         user_type: "client"
     })
 
-    const {username, email, password, confirm_password, user_type} = formData;
+    const {first_name, last_name, email, password, confirm_password, user_type} = formData;
 
     const handleInput = (e) => {
         const {name, value} = e.target;
@@ -24,7 +26,7 @@ const Register = () => {
     const handleRegister = async (e) => {
         e.preventDefault()
         console.log("form data", formData)
-        if (!username || !email || !password) {
+        if (!first_name || !last_name || !email || !password) {
             alert("Please fill all the fields")
             return
         }
@@ -33,24 +35,10 @@ const Register = () => {
             return
         }
         try {
-            const url = `${process.env.REACT_APP_API_GATEWAY_HOST}/auth/v1/register`
-            const options = {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(formData)
-            }
-            const response = await fetch(url, options)
-            console.log("response", response)
-            if (response.status === 201) {
-                const data = await response.json()
-                console.log("data", data)
-                setLoggedInUser(data)
-                alert("Registration Successful")
-            }
+            const user = await registerUser(formData);
+            setLoggedInUser(user);
         } catch (error) {
-            console.log("error", error)
+            console.log("Error:", error);
             
         }
     }
@@ -77,13 +65,25 @@ const Register = () => {
                     <div className="col-md-4 col-lg-4 col-sm-8 mx-auto">
                         <form>
                             <div class="form my-3">
-                                <label for="username">Username</label>
+                                <label for="username">First Name</label>
                                 <input
                                     type="text"
                                     class="form-control"
                                     id="username"
-                                    name="username"
-                                    value={username}
+                                    name="first_name"
+                                    value={first_name}
+                                    onChange={handleInput}
+                                    placeholder="Enter Your username"
+                                />
+                            </div>
+                            <div class="form my-3">
+                                <label for="username">Last Name</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="username"
+                                    name="last_name"
+                                    value={last_name}
                                     onChange={handleInput}
                                     placeholder="Enter Your username"
                                 />

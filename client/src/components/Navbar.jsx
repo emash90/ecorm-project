@@ -6,8 +6,8 @@ import { useCartStore, useUserStore } from '../store/store';
 const Navbar = () => {
     const { loggedInUser, logout  } = useUserStore();
     const { cart } = useCartStore();
+    console.log("loggedInUser", loggedInUser)
 
-    const navigate = useNavigate();
 
     const handleLogout = () => {
         // TODO: 'handle logout'
@@ -32,7 +32,7 @@ const Navbar = () => {
                 >
                     <span className="navbar-toggler-icon"></span>
                 </button>
-                { loggedInUser && loggedInUser.role === 'merchant' && (
+                { loggedInUser && loggedInUser.user_type === 'merchant' && (
                     <>
                         <div className="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul className="navbar-nav m-auto my-2 text-center">
@@ -60,7 +60,7 @@ const Navbar = () => {
                         </div>
                     </> 
                     )}
-                { loggedInUser && loggedInUser.role === 'client' && (
+                { loggedInUser == null || loggedInUser.user_type === 'client' && (
                     <>
                         <div className="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul className="navbar-nav m-auto my-2 text-center">

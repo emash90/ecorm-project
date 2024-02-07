@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Footer, Navbar } from "../components";
 import { useUserStore } from "../store/store";
+import { loginUser } from '../apiCalls/apiCalls';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,15 +15,11 @@ const Login = () => {
   const { email, password } = formData;
 
   useEffect(() => {
-    // This block will run whenever loggedInUser changes
-    console.log("Updated loggedInUser:", loggedInUser);
-
-    // Move the navigation logic inside the if block
-    if (loggedInUser && loggedInUser.role === "client") {
+    if (loggedInUser && loggedInUser.user_type === "client") {
       navigate("/");
-    } else if (loggedInUser && loggedInUser.role === "merchant") {
+    } else if (loggedInUser && loggedInUser.user_type === "merchant") {
       navigate("/merchant");
-    } else if (loggedInUser && loggedInUser.role === "admin") {
+    } else if (loggedInUser && loggedInUser.user_type === "admin") {
       navigate("/admin");
     } else {
       navigate("/login");
@@ -38,24 +35,13 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const url = process.env.REACT_APP_API_GATEWAY_HOST;
-      const response = await fetch(`${url}/auth/v1/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.status === 200) {
-        const data = await response.json();
-        console.log(data);
-        setLoggedInUser(data);
-      } else {
-        console.log("Invalid credentials");
+      const response = await loginUser(formData);
+      console.log("response", response.message);
+      if (response.message === "success") {
+        setLoggedInUser(response.data);
       }
     } catch (error) {
-      console.error("Error logging in:", error);
+      alert (error.message);
     }
   };
 

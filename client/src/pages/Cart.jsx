@@ -35,12 +35,44 @@ const Cart = () => {
     let shipping = 30.0;
     let totalItems = 0;
     cart.map((item) => {
-      return (subtotal += item.product_price * item.quantity);
+      return (subtotal += item.price * item.quantity);
     });
 
     cart.map((item) => {
       return (totalItems += item.quantity);
     });
+
+    //////////////////////////handleCheckout///////////////////////////
+
+    const handleCheckout = (e) => {
+      e.preventDefault();
+      /////create order
+      let order = {
+        products: cart,
+        total: subtotal + shipping,
+      };
+      console.log("order", order);
+      /////post order to database
+      const postOrder = async () => {
+        try {
+          const response = await fetch("/api/orders", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(order),
+          });
+          const data = await response.json();
+          console.log("data", data);
+          clearCart();
+        } catch (error) {
+          console.log("error", error);
+        }
+      }
+    }
+
+
+
     return (
       <>
         <section className="h-100 gradient-custom">
@@ -144,13 +176,7 @@ const Cart = () => {
                         </span>
                       </li>
                     </ul>
-
-                    <Link
-                      to="/checkout"
-                      className="btn btn-dark btn-lg btn-block"
-                    >
-                      Go to checkout
-                    </Link>
+                    <Button className="btn btn-dark btn-lg btn-block" onClick={(e)=> handleCheckout(e)} >Checkout</Button>
                     <Button className="btn btn-warning btn-lg btn-block mt-3" onClick={() => clearCart()}> Clear Cart</Button>
                   </div>
                 </div>

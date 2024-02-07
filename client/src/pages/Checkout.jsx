@@ -26,7 +26,7 @@ const Checkout = () => {
     let shipping = 30.0;
     let totalItems = 0;
     cart.map((item) => {
-      return (subtotal += item.product_price * item.quantity);
+      return (subtotal += item.price * item.quantity);
     });
 
     cart.map((item) => {

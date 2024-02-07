@@ -7,6 +7,7 @@ import ShowMerchantProducts from "./ShowMerchantProducts";
 import ShowProducts from "./ShowProducts";
 import { useCartStore } from "../store/store";
 import { useNavigate } from "react-router-dom";
+import { getAllProducts } from "../apiCalls/apiCalls";
 
 const Products = ({ uploadPreset, cloudName, loggedInUser }) => {
   const navigate = useNavigate();
@@ -29,13 +30,12 @@ const Products = ({ uploadPreset, cloudName, loggedInUser }) => {
   useEffect(() => {
     const getProducts = async () => {
       setLoading(true);
-      const response = await fetch("http://localhost:5000/product/v1/all");
+      const response = await getAllProducts();
       if (componentMounted) {
-        setData(await response.clone().json());
-        setFilter(await response.json());
+        setData(response);
+        setFilter(response);
         setLoading(false);
       }
-
       return () => {
         componentMounted = false;
       };
