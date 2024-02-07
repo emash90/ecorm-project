@@ -16,7 +16,8 @@ app.listen(port, () => {
 // Function to handle microservice requests
 const handleMicroserviceRequest = async (serviceName, req, res) => {
   const serviceHost = process.env[`${serviceName}_SERVICE_HOST`] || 'localhost';
-  const serviceURL = `http://${serviceHost}:${process.env[`${serviceName}_SERVICE_PORT`] || 4000}`;
+  const serviceURL = `http://${serviceHost}:${process.env[`${serviceName}_SERVICE_PORT`] || 
+    (serviceName === 'AUTH' ? 5001 : serviceName === 'PRODUCT' ? 5002 : serviceName === 'CART' ? 5003 : 5004)}`;
   let url;
   switch (serviceName) {
     case 'AUTH':
@@ -43,7 +44,6 @@ const handleMicroserviceRequest = async (serviceName, req, res) => {
     console.log("response", response.data)
     res.status(response.status).send(response.data);
   } catch (error) {
-    console.error("error ===>", error.response.data);
     res.status(error.response ? error.response.status : 500).json(error.response ? error.response.data : { message: 'Internal server error' });
   }
 };

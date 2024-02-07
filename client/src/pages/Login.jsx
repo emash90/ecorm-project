@@ -15,10 +15,6 @@ const Login = () => {
   const { email, password } = formData;
 
   useEffect(() => {
-    // This block will run whenever loggedInUser changes
-    console.log("Updated loggedInUser:", loggedInUser);
-
-    // Move the navigation logic inside the if block
     if (loggedInUser && loggedInUser.user_type === "client") {
       navigate("/");
     } else if (loggedInUser && loggedInUser.user_type === "merchant") {
@@ -39,10 +35,13 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const user = await loginUser(formData);
-      setLoggedInUser(user);
+      const response = await loginUser(formData);
+      console.log("response", response.message);
+      if (response.message === "success") {
+        setLoggedInUser(response.data);
+      }
     } catch (error) {
-      console.log("Error:", error);
+      alert (error.message);
     }
   };
 

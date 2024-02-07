@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import { Image } from "cloudinary-react";
 
 const ShowProducts = ({ filterProduct, cloudName,  filter, navigateToProduct, setFilter, data }) => {
-  console.log("filter", filter)
+  console.log("filter", filter);
+  console.log("data", data);
   return (
     <>
     <Nav className="justify-content-center" activeKey="/home">
@@ -33,8 +34,8 @@ const ShowProducts = ({ filterProduct, cloudName,  filter, navigateToProduct, se
     </Nav>
     {filter.map((product) => {
       return (
-        <div id={product.id} key={product.id} className="col-md-4 col-sm-6 col-xs-8 col-12 mb-4">
-          <div className="card text-center h-100" key={product.id} style={{ cursor: "pointer" }} onClick={() => navigateToProduct(product.id)}>
+        <div id={product._id} key={product._id} className="col-md-4 col-sm-6 col-xs-8 col-12 mb-4">
+          <div className="card text-center h-100" key={product._id} style={{ cursor: "pointer" }} onClick={() => navigateToProduct(product._id)}>
             <div className='card-img-top'>
               {cloudName && product.image && (
                 <Carousel>
@@ -67,7 +68,7 @@ const ShowProducts = ({ filterProduct, cloudName,  filter, navigateToProduct, se
                 <li className="list-group-item">Vestibulum at eros</li> */}
             </ul>
             <div className="card-body">
-              <Link to={"/product/" + product.id} className="btn btn-dark m-1">
+              <Link to={"/product/" + product._id} className="btn btn-dark m-1">
                 Buy Now
               </Link>
               {/* <button className="btn btn-dark m-1" onClick={() => addProduct(product)}>

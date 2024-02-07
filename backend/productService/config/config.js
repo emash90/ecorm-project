@@ -5,7 +5,7 @@ const MONGO_PASSWORD = process.env.MONGO_PASSWORD || '123456';
 const MONGO_DB = process.env.MONGO_DB || 'test';
 const REDIS_PORT = process.env.REDIS_PORT || 6379;
 const REDIS_HOST = process.env.REDIS_HOST || 'localhost';
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5002
 
 
 module.exports = {

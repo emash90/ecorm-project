@@ -30,7 +30,14 @@ export const registerUser = async (user) => {
     }
 }
 
+///////get all products
 
+export const getAllProducts = async () => {
+    const url = `${baseURL}/product/v1/products`;
+    const response = await axios.get(url);
+    console.log(response.data);
+    return response.data;
+}
 
 
 ////add new product
@@ -42,6 +49,23 @@ export const addProduct = async (product) => {
     return response.data;
 }
 
-/////
+////////////get product by id
+
+export const getProductById = async (id) => {
+    console.log("id", id);
+    const url = `${baseURL}/product/v1/products/${id}`;
+    const response = await axios.get(url);
+    console.log(response.data);
+    return response.data;
+}
+
+/////edit product
+
+export const editProduct = async (product) => {
+    const url = `${baseURL}/product/v1/products/${product._id}`;
+    const response = await axios.put(url, product);
+    console.log(response.data);
+    return response.data;
+}
 
 

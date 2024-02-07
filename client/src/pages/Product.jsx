@@ -6,11 +6,12 @@ import Marquee from "react-fast-marquee";
 import { Modal, Button, Form } from "react-bootstrap";
 import { Image } from "cloudinary-react";
 import { useCartStore, useUserStore } from "../store/store";
+import { editProduct, getProductById } from "../apiCalls/apiCalls";
 
 const Product = () => {
   const { loggedInUser } = useUserStore();
   const { cart, addToCart, removeFromCart, clearCart } = useCartStore();
-  const userRole = loggedInUser && loggedInUser.role;
+  const userRole = loggedInUser && loggedInUser.user_type;
   const { id } = useParams();
   const [product, setProduct] = useState([]);
   const [similarProducts, setSimilarProducts] = useState([]);
@@ -29,22 +30,21 @@ const Product = () => {
 
   useEffect(() => {
     const getProduct = async () => {
-      const url = process.env.REACT_APP_API_GATEWAY_HOST;
       setLoading(true);
       setLoading2(true);
 
       try {
-        const response = await fetch(`${url}/product/v1/${id}`);
-        const data = await response.json();
+        const response = await getProductById(id);
+        const data = await response
         setProduct(data);
         setLoading(false);
 
-        const response2 = await fetch(
-          `${url}/product/v1/similar_products/${data.category}`
-        );
-        const data2 = await response2.json();
-        setSimilarProducts(data2);
-        setLoading2(false);
+        // const response2 = await fetch(
+        //   // TODO: API to get similar products: get products with the same category
+        // );
+        // const data2 = await response2
+        // setSimilarProducts(data2);
+        // setLoading2(false);
       } catch (error) {
         console.error("Error fetching data:", error);
         setLoading(false);
@@ -63,11 +63,10 @@ const Product = () => {
   const handleProductEdit = (id) => {
     console.log(id);
     showModal();
-    const url = process.env.REACT_APP_API_GATEWAY_HOST;
     const getProduct = async () => {
       try {
-        const response = await fetch(`${url}/product/v1/${id}`);
-        const data = await response.json();
+        const response = await getProductById(id);
+        const data = await response
         setProductToEdit(data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -112,31 +111,22 @@ const Product = () => {
     
 
   const handleProductDelete = () => {
-    console.log("delete");
+    //TODO: API to delete product
   };
 
   const handleSave = (e) => {
     e.preventDefault();
-    console.log("Edited Product Details:", productToEdit);
     setProductToSave(productToEdit);
-    const url = process.env.REACT_APP_API_GATEWAY_HOST;
-    console.log("url", url)
     const updateProduct = async () => {
       try {
-        const response = await fetch(`${url}/product/v1/product_edit`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(productToEdit),
-        });
-        const data = await response.json();
-        console.log("data", data.product);
+        const response = await editProduct(productToEdit);
+        console.log("response", response);
+        const data = await response;
         setProductToEdit({});
         setProductToSave({});
-        if(data.message === "Product edited successfully") {
+        if(data) {
           handleClose();
-          navigate("/product/" + data.product._id);
+          navigate("/product/" + data._id);
         } else {
           console.error("Error updating product:", data.message);
         }
@@ -213,8 +203,8 @@ const Product = () => {
                 <Form.Control
                   type="text"
                   placeholder="Enter product name"
-                  name="product_name"
-                  value={productToEdit.product_name}
+                  name="name"
+                  value={productToEdit.name}
                   onChange={handleNewProduct}
                 />
               </Form.Group>
@@ -223,8 +213,8 @@ const Product = () => {
                 <Form.Control
                   type="text"
                   placeholder="Enter product price"
-                  name="product_price"
-                  value={productToEdit.product_price}
+                  name="price"
+                  value={productToEdit.price}
                   onChange={handleNewProduct}
                 />
               </Form.Group>
@@ -233,8 +223,8 @@ const Product = () => {
                 <Form.Control
                   type="text"
                   placeholder="Enter product description"
-                  name="product_description"
-                  value={productToEdit.product_description}
+                  name="description"
+                  value={productToEdit.description}
                   onChange={handleNewProduct}
                 />
               </Form.Group>
@@ -262,7 +252,6 @@ const Product = () => {
                     <option value="shampoo">Shampoo</option>
                     <option value="conditioner">Conditioner</option>
                     <option value="styling_products">Styling Products</option>
-                    {/* Add other hair product subcategories as needed */}
                   </Form.Select>
                 </Form.Group>
               )}
