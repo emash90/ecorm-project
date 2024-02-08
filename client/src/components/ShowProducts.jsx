@@ -8,27 +8,30 @@ const ShowProducts = ({ filterProduct, cloudName,  filter, navigateToProduct, se
   console.log("data", data);
   return (
     <>
-    <Nav className="justify-content-center" activeKey="/home">
+    <Nav className="justify-content-center" activeKey="/home" variant="tabs" bg="light" >
       <Nav.Item>
-        <Nav.Link href="/home">All</Nav.Link>
+        <Nav.Link href="/product">All</Nav.Link>
       </Nav.Item>
       <Nav.Item>
         <NavDropdown title="Face Products" id="nav-dropdown">
-          <NavDropdown.Item onClick={() => setFilter(data)} >All</NavDropdown.Item>
-          <NavDropdown.Item onClick={()=> (filterProduct("jewelery"))}>Face Wash</NavDropdown.Item>
-          <NavDropdown.Item onClick={()=> (filterProduct("men's clothing"))}>Face Cream</NavDropdown.Item>
-          <NavDropdown.Item onClick={()=> (filterProduct("jewelery"))}>Face Mask</NavDropdown.Item>
-          <NavDropdown.Item onClick={()=> (filterProduct("jewelery"))}>Face Scrub</NavDropdown.Item>
-          <NavDropdown.Item onClick={()=> (filterProduct("jewelery"))}>Face Serum</NavDropdown.Item>
-          <NavDropdown.Item onClick={()=> (filterProduct("jewelery"))}>Face Toner</NavDropdown.Item>
+          <NavDropdown.Item onClick={() => filterProduct('face_products')} >All</NavDropdown.Item>
+          <NavDropdown.Item onClick={()=> (filterProduct("face_wash"))}>Face Wash</NavDropdown.Item>
+          <NavDropdown.Item onClick={()=> (filterProduct("face_cream"))}>Face Cream</NavDropdown.Item>
+          <NavDropdown.Item onClick={()=> (filterProduct("face_mask"))}>Face Mask</NavDropdown.Item>
+          <NavDropdown.Item onClick={()=> (filterProduct("face_scrub"))}>Face Scrub</NavDropdown.Item>
+          <NavDropdown.Item onClick={()=> (filterProduct("face_serum"))}>Face Serum</NavDropdown.Item>
+          <NavDropdown.Item onClick={()=> (filterProduct("face_toner"))}>Face Toner</NavDropdown.Item>
         </NavDropdown >
       </Nav.Item>
       <Nav.Item>
         <NavDropdown title="Hair Products" id="nav-dropdown">
-          <NavDropdown.Item href="#action/3.1">Shampoo</NavDropdown.Item>
-          <NavDropdown.Item href="#action/3.2">Conditioner</NavDropdown.Item>
-          <NavDropdown.Item href="#action/3.3">Hair Oil</NavDropdown.Item>
-          <NavDropdown.Item href="#action/3.3">Hair Serum</NavDropdown.Item>
+          <NavDropdown.Item onClick={() => filterProduct('hair_products')} >All</NavDropdown.Item>
+          <NavDropdown.Item onClick={()=> (filterProduct("hair_oil"))}>Hair Oil</NavDropdown.Item>
+          <NavDropdown.Item onClick={()=> (filterProduct("shampoo"))}>Hair Shampoo</NavDropdown.Item>
+          <NavDropdown.Item onClick={()=> (filterProduct("hair_conditioner"))}>Hair Conditioner</NavDropdown.Item>
+          <NavDropdown.Item onClick={()=> (filterProduct("hair_serum"))}>Hair Serum</NavDropdown.Item>
+          <NavDropdown.Item onClick={()=> (filterProduct("hair_mask"))}>Hair Mask</NavDropdown.Item>
+          <NavDropdown.Item onClick={()=> (filterProduct("hair_gel"))}>Hair Gel</NavDropdown.Item>
         </NavDropdown>
       </Nav.Item>
     </Nav>
