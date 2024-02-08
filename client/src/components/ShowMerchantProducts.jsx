@@ -4,8 +4,7 @@ import { Image } from 'cloudinary-react';
 import { Card, Carousel } from "react-bootstrap";
 
 
-const ShowMerchantProducts = ({ data, cloudName, uploadPreset }) => {
-    console.log("cloudName", cloudName, "uploadPreset", uploadPreset);
+const ShowMerchantProducts = ({ data, cloudName }) => {
     const [showModal, setShowModal] = useState(false);
     const [editedProduct, setEditedProduct] = useState({});
     const navigate = useNavigate();
@@ -30,9 +29,9 @@ const ShowMerchantProducts = ({ data, cloudName, uploadPreset }) => {
 
             {data.map((product) => {
                 return (
-                    <Card className="col-12 col-md-4 col-lg-3 m-2" key={product.id}>
+                    <Card className="col-12 col-md-4 col-lg-3 m-2" key={product._id}>
                         <Carousel>
-                            {product.image.map((image, index) => (
+                            {product.images.map((image, index) => (
                                 <Carousel.Item key={index}>
                                     <Image cloudName={cloudName} publicId={image} width="300" crop="scale" />
                                 </Carousel.Item>

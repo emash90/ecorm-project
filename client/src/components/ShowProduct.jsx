@@ -11,7 +11,7 @@ const ShowProduct = ({ product, userRole, addProduct, handleProductEdit, handleP
       <div className="row">
         <div className="col-md-6 col-sm-12 py-3">
           <Carousel>
-            {product.product_images && product.product_images.map((image, index) => (
+            {product.images && product.images.map((image, index) => (
               <Carousel.Item key={index}>
                 <Image cloudName={cloudName} publicId={image} width="400" crop="scale" />
               </Carousel.Item>

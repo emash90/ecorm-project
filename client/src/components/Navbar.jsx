@@ -104,7 +104,7 @@ const Navbar = () => {
                             </>
                         ) : (
                             <>
-                                <NavLink to="/profile" className="btn btn-outline-dark m-1">
+                                <NavLink to="/profile" className="btn btn-outline-dark m-2">
                                     <i className="fa fa-user mr-2"></i>
                                     <NavDropdown title={loggedInUser.name} id="basic-nav-dropdown">
                                         <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>

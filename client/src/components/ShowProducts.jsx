@@ -37,9 +37,9 @@ const ShowProducts = ({ filterProduct, cloudName,  filter, navigateToProduct, se
         <div id={product._id} key={product._id} className="col-md-4 col-sm-6 col-xs-8 col-12 mb-4">
           <div className="card text-center h-100" key={product._id} style={{ cursor: "pointer" }} onClick={() => navigateToProduct(product._id)}>
             <div className='card-img-top'>
-              {cloudName && product.image && (
+              {cloudName && product.images && (
                 <Carousel>
-                  {product.image.map((image) => {
+                  {product.images.map((image) => {
                     return (
                       <Carousel.Item key={image}>
                         <Image

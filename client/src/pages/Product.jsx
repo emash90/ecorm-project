@@ -6,7 +6,7 @@ import Marquee from "react-fast-marquee";
 import { Modal, Button, Form } from "react-bootstrap";
 import { Image } from "cloudinary-react";
 import { useCartStore, useUserStore } from "../store/store";
-import { editProduct, getProductById } from "../apiCalls/apiCalls";
+import { editProduct, getProductById, uploadImageToCloudinary } from "../apiCalls/apiCalls";
 
 const Product = () => {
   const { loggedInUser } = useUserStore();
@@ -22,7 +22,6 @@ const Product = () => {
   const [productToSave, setProductToSave] = useState({});
 
   const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
-  const uploadPreset = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET;
   const handleClose = () => setShow(false);
   const showModal = () => setShow(true);
 
@@ -86,23 +85,19 @@ const Product = () => {
     const files = e.target.files;
     const data = new FormData();
     data.append("file", files[0]);
-    data.append("upload_preset", uploadPreset);
 
     try {
-      const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-        {
-          method: "POST",
-          body: data,
-        });
-      const file = await res.json();
+      const res = await uploadImageToCloudinary(data);
+      const file = await res;
       console.log(file);
       console.log("file url", file.secure_url);
+      console.log("productToEdit", productToEdit);
       // Check if the image URL already exists in the imagePreview array
-      if (productToEdit.product_images.includes(file.secure_url)) {
+      if (productToEdit.images && productToEdit.images.includes(file.secure_url)) {
         console.error("Error: Similar image has already been uploaded.");
         // Handle the error as needed, such as displaying an error message to the user
       } else {
-        setProductToEdit({ ...productToEdit, product_images: [...productToEdit.product_images, file.secure_url] });
+        setProductToEdit({ ...productToEdit, images: [...productToEdit.images, file.secure_url] });
       }
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -120,7 +115,6 @@ const Product = () => {
     const updateProduct = async () => {
       try {
         const response = await editProduct(productToEdit);
-        console.log("response", response);
         const data = await response;
         setProductToEdit({});
         setProductToSave({});
@@ -140,7 +134,7 @@ const Product = () => {
 
   const handleDeleteImage = (image) => {
     console.log("delete image", image);
-    productToEdit.product_images = productToEdit.product_images.filter((item) => item !== image);
+    productToEdit.images = productToEdit.images.filter((item) => item !== image);
     setProductToEdit({ ...productToEdit });
   }
 
@@ -281,8 +275,8 @@ const Product = () => {
                 />
               </Form.Group>
               <div className="text-center" style={{ fontSize: '20px' }}>
-                {productToEdit.product_images &&
-                  productToEdit.product_images.map((image, index) => (
+                {productToEdit.images &&
+                  productToEdit.images.map((image, index) => (
                     <React.Fragment key={index}>
                       {index > 0 && index % 4 === 0 && <br />} {/* Start a new row after every 4 images */}
                       <div style={{ position: 'relative', display: 'inline-block', margin: '5px' }}>
