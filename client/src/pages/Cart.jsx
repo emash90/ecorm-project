@@ -1,10 +1,12 @@
 import React from "react";
 import { Footer, Navbar } from "../components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
-const { useCartStore } = require("../store/store");
+const { useCartStore, useUserStore } = require("../store/store");
+const { postNewOrder } = require("../apiCalls/apiCalls");
 
 const Cart = () => {
+  const navigate = useNavigate();
   const { cart, addToCart, removeFromCart, clearCart } = useCartStore();
   console.log("cart", cart);
 
@@ -43,32 +45,37 @@ const Cart = () => {
     });
 
     //////////////////////////handleCheckout///////////////////////////
+    const { loggedInUser } = useUserStore()
 
     const handleCheckout = (e) => {
       e.preventDefault();
       /////create order
+      console.log("loggedInUser", loggedInUser);
+      if (!loggedInUser) {
+        alert("Please login to checkout");
+        return;
+      }
       let order = {
         products: cart,
-        total: subtotal + shipping,
+        totalAmount: subtotal + shipping,
+        customerId: loggedInUser._id,
       };
       console.log("order", order);
       /////post order to database
       const postOrder = async () => {
         try {
-          const response = await fetch("/api/orders", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(order),
-          });
-          const data = await response.json();
-          console.log("data", data);
+          const response = await postNewOrder(order);
+          console.log("response", response);
+          if (response.message === "Order created successfully") {
+            alert("Order created successfully");
+          }
           clearCart();
+          navigate("/");
         } catch (error) {
           console.log("error", error);
         }
       }
+      postOrder();
     }
 
 

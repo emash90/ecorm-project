@@ -74,9 +74,22 @@ const Products = ({ uploadPreset, cloudName, loggedInUser }) => {
   };
 
   const filterProduct = (cat) => {
-    const updatedList = data.filter((item) => item.category === cat);
-    setFilter(updatedList);
-  }
+    switch (cat) {
+      case "all":
+        setFilter(data);
+        break;
+      case "face_products":
+        setFilter(data.filter((product) => product.category === "face_product"));
+        break;
+      case "hair_products":
+        setFilter(data.filter((product) => product.category === "hair_product"));
+        break; 
+      default:
+        setFilter(data.filter((product) => product.subcategory === cat));
+        break;
+    }
+}
+
 
 
  

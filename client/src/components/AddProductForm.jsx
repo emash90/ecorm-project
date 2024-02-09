@@ -4,22 +4,23 @@ import { useNavigate } from 'react-router-dom';
 import { Image } from 'cloudinary-react';
 import { useSelector } from 'react-redux';
 import { useUserStore } from '../store/store';
+import { addProduct, uploadImageToCloudinary, cloudName } from '../apiCalls/apiCalls';
 
 const AddProductForm = () => {
     const { loggedInUser } = useUserStore();
     const navigate = useNavigate();
     const [imagePreview, setImagePreview] = useState([])
     const [product_details, setProductDetails] = useState({
-        product_name: '',
-        product_description: '',
-        product_price: '',
-        product_images: [],
-        product_category: '',
-        product_subcategory: '',
-        product_quantity: ''
+        name: '',
+        description: '',
+        price: '',
+        images: [],
+        category: '',
+        subcategory: '',
+        quantity: ''
     })
 
-    const {product_name, product_description, product_price, product_images, product_category, product_subcategory, product_quantity} = product_details;
+    const {name, description, price, images, category, subcategory, quantity} = product_details;
 
     const handleInput = (e) => {
         const {name, value} = e.target;
@@ -29,35 +30,29 @@ const AddProductForm = () => {
     const clearProductDetails = (e) => {
         e.preventDefault()
         setProductDetails({
-            product_name: '',
-            product_description: '',
-            product_price: '',
-            product_images: [],
-            product_category: '',
-            product_subcategory: '',
-            product_quantity: ''
+            name: '',
+            description: '',
+            price: '',
+            images: [],
+            category: '',
+            subcategory: '',
+            quantity: ''
         })
     }
 
     //////////////upload product image to cloudinary
 
-    const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
-    const uploadPreset = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET;
+   
     const uploadImage = async (e) => {
         e.preventDefault();
-        console.log("cloudName", cloudName)
         const files = e.target.files;
         const data = new FormData();
         data.append('file', files[0]);
-        data.append('upload_preset', uploadPreset);
     
         try {
-            const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
-                method: 'POST',
-                body: data,
-            });
-    
-            const file = await res.json();
+            const res = await uploadImageToCloudinary(data);
+            console.log("res", res)
+            const file = await res
             console.log(file);
             console.log("file url", file.secure_url)
             // Check if the image URL already exists in the imagePreview array
@@ -66,7 +61,7 @@ const AddProductForm = () => {
                 // Handle the error as needed, such as displaying an error message to the user
             } else {
                 setImagePreview((prevImages) => [...prevImages, file.secure_url]);
-                setProductDetails({ ...product_details, product_images: [...product_images, file.secure_url] });
+                setProductDetails({ ...product_details, images: [...images, file.secure_url] });
             }
         } catch (err) {
             console.log(err);
@@ -75,34 +70,24 @@ const AddProductForm = () => {
     
     
 
-    const handleAddProduct = (e) => {
+    const handleAddProduct = async (e) => {
         e.preventDefault()
         console.log("product details", product_details)
-        if (!product_name || !product_description || !product_price || !product_category || !product_subcategory || !product_quantity) {
+        if (!name || !description || !price || !category || !subcategory || !quantity) {
             alert("Please fill all the fields")
             return
         }
         product_details.session_id = loggedInUser.session_id;
-        const url = process.env.REACT_APP_API_GATEWAY_HOST + '/api/v1/product'
         try {
-            /////post product details to the backend
-            fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(product_details)
-            })
-            .then(res => res.json())
-            .then(data => {
-                console.log(data)
-                navigate('/merchant')
-            })
-            .catch(err => console.log(err))
-        }
-        catch(err) {
-            console.log(err)
-            alert("Something went wrong")
+                const response = await addProduct(product_details);
+                console.log("response", response)
+                if (response.message === "Product created successfully") {
+                    alert("Product added successfully")
+                    navigate('/merchant')
+                }
+        } catch (error) {
+            console.log("error", error)
+
         }
     }
   return (
@@ -112,23 +97,23 @@ const AddProductForm = () => {
     <Form className='container my-3 py-3'>
     <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Product Name</Form.Label>
-        <Form.Control type="text" placeholder="Enter product name" name='product_name' value={product_name} onChange={handleInput} />
+        <Form.Control type="text" placeholder="Enter product name" name='name' value={name} onChange={handleInput} />
     </Form.Group>
     <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Product Description</Form.Label>
-        <Form.Control type="text" placeholder="Enter product description" name='product_description' value={product_description} onChange={handleInput} />
+        <Form.Control type="text" placeholder="Enter product description" name='description' value={description} onChange={handleInput} />
     </Form.Group>
     <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Product Price</Form.Label>
         <InputGroup className="mb-3">
             <InputGroup.Text>$</InputGroup.Text>
-            <Form.Control type="number" placeholder="Enter product price" name='product_price' value={product_price} onChange={handleInput} />
+            <Form.Control type="number" placeholder="Enter product price" name='price' value={price} onChange={handleInput} />
             <InputGroup.Text>.00</InputGroup.Text>
         </InputGroup>
     </Form.Group>
     <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Upload Product Image</Form.Label>
-        <Form.Control type="file" placeholder="Enter product image" name='product_image' onChange={uploadImage} />
+        <Form.Control type="file" placeholder="Enter product image" name='image' onChange={uploadImage} />
     </Form.Group>
     <div className="text-center" style={{ fontSize: '20px' }}>
                 {imagePreview.length > 0 &&
@@ -141,7 +126,7 @@ const AddProductForm = () => {
                                 style={{ cursor: 'pointer' }}
                                 onClick={() => {
                                     setImagePreview(imagePreview.filter((img) => img !== image));
-                                    setProductDetails({ ...product_details, product_images: product_images.filter((img) => img !== image) });
+                                    setProductDetails({ ...product_details, images: images.filter((img) => img !== image) });
                                 }}
                             >
                                 {' '}
@@ -153,13 +138,13 @@ const AddProductForm = () => {
             </div>
     <Form.Text className="text-muted"> product category and sub-category </Form.Text>
     <div className="mb-3 text-center d-flex justify-content-between align-items-center flex-wrap flex-md-nowrap">
-        <Form.Select aria-label="Default select example" name='product_category' value={product_category} onChange={handleInput}>
+        <Form.Select aria-label="Default select example" name='category' value={category} onChange={handleInput}>
             <option>Product Category</option>
             <option value="face_product">Face Product</option>
             <option value="hair_product">Hair Product</option>
         </Form.Select>
-        <Form.Select aria-label="Default select example" name='product_subcategory' value={product_subcategory} onChange={handleInput}>
-            {product_category === 'face_product' && (
+        <Form.Select aria-label="Default select example" name='subcategory' value={subcategory} onChange={handleInput}>
+            {category === 'face_product' && (
                 <>
                     <option value="face_cream">Face Cream</option>
                     <option value="face_wash">Face Wash</option>
@@ -167,7 +152,7 @@ const AddProductForm = () => {
                     <option value="face_scrub">Face Scrub</option>
                 </>
             )}
-            {product_category === 'hair_product' && (
+            {category === 'hair_product' && (
                 <>
                     <option value="hair_oil">Hair Oil</option>
                     <option value="hair_shampoo">Hair Shampoo</option>
@@ -178,7 +163,7 @@ const AddProductForm = () => {
     </div>
     <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Product Quantity</Form.Label>
-        <Form.Control type="number" placeholder="Enter product quantity" name='product_quantity' value={product_quantity} onChange={handleInput} />
+        <Form.Control type="number" placeholder="Enter product quantity" name='quantity' value={quantity} onChange={handleInput} />
     </Form.Group>
     <Button className='mr-3' variant="primary" type="submit" onClick={handleAddProduct}>
         Add Product

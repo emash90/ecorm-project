@@ -82,8 +82,6 @@ services:
   orderService:
     build: ./backend/orderService
     image: orderservicecontainer
-    ports:
-      - "5002:5002"
     volumes:
       - ./backend/orderservice:/app
       - /app/node_modules
@@ -99,6 +97,7 @@ services:
       - MONGO_DB=order
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - PORT=5002
     command: ["npm", "run", "dev"]
   client:
     build: ./client
@@ -109,10 +108,10 @@ services:
       - ./client:/app
       - /app/node_modules
     environment:
-      - REACT_APP_API_GATEWAY_HOST=${API_GATEWAY_HOST}
+      - REACT_APP_API_GATEWAY_HOST=${REACT_APP_API_GATEWAY_HOST}
       - REACT_APP_API_GATEWAY_PORT=5000
-      - REACT_APP_CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
-      - REACT_APP_CLOUDINARY_UPLOAD_PRESET=${CLOUDINARY_UPLOAD_PRESET}
+      - REACT_APP_CLOUDINARY_CLOUD_NAME=${REACT_APP_CLOUDINARY_CLOUD_NAME}
+      - REACT_APP_CLOUDINARY_UPLOAD_PRESET=${REACT_APP_CLOUDINARY_UPLOAD_PRESET}
     command: ["npm", "start"]
 
 volumes:

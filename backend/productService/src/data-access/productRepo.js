@@ -1,7 +1,6 @@
 const makeProductRepo = ({ database }) => {
     return Object.freeze({
         create: async (productEntity) => {
-            console.log('productEntity ===>', productEntity);
             const product = await database.insert(productEntity);
             return product;
         },

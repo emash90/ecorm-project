@@ -17,7 +17,7 @@ app.listen(port, () => {
 const handleMicroserviceRequest = async (serviceName, req, res) => {
   const serviceHost = process.env[`${serviceName}_SERVICE_HOST`] || 'localhost';
   const serviceURL = `http://${serviceHost}:${process.env[`${serviceName}_SERVICE_PORT`] || 
-    (serviceName === 'AUTH' ? 5001 : serviceName === 'PRODUCT' ? 5002 : serviceName === 'CART' ? 5003 : 5004)}`;
+    (serviceName === 'AUTH' ? 5001 : serviceName === 'PRODUCT' ? 5002 : serviceName === 'ORDER' ? 5003 : 5004)}`;
   let url;
   switch (serviceName) {
     case 'AUTH':

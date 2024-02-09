@@ -2,7 +2,7 @@ import axios from 'axios';
 
 
 
-const baseURL = process.env.REACT_APP_API_GATEWAY_HOST || "http://localhost:5000";
+const baseURL = process.env.REACT_APP_API_GATEWAY_HOST;
 ////login user
 
 export const loginUser = async (user) => {
@@ -43,7 +43,7 @@ export const getAllProducts = async () => {
 ////add new product
 
 export const addProduct = async (product) => {
-    const url = `${baseURL}/api/v1/products`;
+    const url = `${baseURL}/product/v1/products`;
     const response = await axios.post(url, product);
     console.log(response.data);
     return response.data;
@@ -59,11 +59,41 @@ export const getProductById = async (id) => {
     return response.data;
 }
 
-/////edit product
+/////edit product 
 
 export const editProduct = async (product) => {
     const url = `${baseURL}/product/v1/products/${product._id}`;
     const response = await axios.put(url, product);
+    console.log(response.data);
+    return response.data;
+}
+
+/////upload image
+export const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
+const uploadPreset = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET;
+
+export const uploadImageToCloudinary = async (formData) => {
+    formData.append('upload_preset', uploadPreset);
+
+    const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+
+    const response = await axios.post(url, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        params: {
+            upload_preset: uploadPreset
+        }
+    });
+    console.log(response.data);
+    return response.data;
+}
+
+/////order apis
+
+export const postNewOrder = async (order) => {
+    const url = `${baseURL}/orders/v1/order`;
+    const response = await axios.post(url, order);
     console.log(response.data);
     return response.data;
 }

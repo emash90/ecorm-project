@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { NavDropdown } from 'react-bootstrap';
+import { Button, ButtonGroup, Dropdown, DropdownButton, NavDropdown } from 'react-bootstrap';
 import { useCartStore, useUserStore } from '../store/store';
 
 const Navbar = () => {
@@ -8,6 +8,9 @@ const Navbar = () => {
     const { cart } = useCartStore();
     console.log("loggedInUser", loggedInUser)
 
+    const handleProfile = () => {
+
+    }
 
     const handleLogout = () => {
         // TODO: 'handle logout'
@@ -104,13 +107,10 @@ const Navbar = () => {
                             </>
                         ) : (
                             <>
-                                <NavLink to="/profile" className="btn btn-outline-dark m-1">
-                                    <i className="fa fa-user mr-2"></i>
-                                    <NavDropdown title={loggedInUser.name} id="basic-nav-dropdown">
-                                        <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
-                                        <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
-                                    </NavDropdown>
-                                </NavLink>
+                                <DropdownButton as={ButtonGroup} title={loggedInUser.first_name} id="bg-nested-dropdown" variant='dark' >
+                                    <Dropdown.Item eventKey="1" onClick={handleProfile}>Profile</Dropdown.Item>
+                                    <Dropdown.Item eventKey="2" onClick={handleLogout}>Logout</Dropdown.Item>
+                                </DropdownButton>
                             </>
                         )}
                     </div>
