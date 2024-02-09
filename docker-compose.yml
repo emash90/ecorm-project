@@ -82,8 +82,6 @@ services:
   orderService:
     build: ./backend/orderService
     image: orderservicecontainer
-    ports:
-      - "5002:5002"
     volumes:
       - ./backend/orderservice:/app
       - /app/node_modules
@@ -99,6 +97,7 @@ services:
       - MONGO_DB=order
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - PORT=5002
     command: ["npm", "run", "dev"]
   client:
     build: ./client
