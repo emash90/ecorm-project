@@ -7,7 +7,7 @@ const baseURL = process.env.REACT_APP_API_GATEWAY_HOST;
 
 export const loginUser = async (user) => {
     try {
-        const url = `${baseURL}/auth/v1/login`;
+        const url = `${baseURL}/api/v1/auth/login`;
         const response = await axios.post(url, user);
         return response.data;
     } catch (error) {
@@ -20,7 +20,7 @@ export const loginUser = async (user) => {
 
 export const registerUser = async (user) => {
     try {
-        const url = `${baseURL}/auth/v1/register`;
+        const url = `${baseURL}/api/v1/auth/register`;
         const response = await axios.post(url, user);
         console.log(response.data);
         return response.data;
@@ -33,7 +33,7 @@ export const registerUser = async (user) => {
 ///////get all products
 
 export const getAllProducts = async () => {
-    const url = `${baseURL}/product/v1/products`;
+    const url = `${baseURL}/api/v1/product`;
     const response = await axios.get(url);
     console.log(response.data);
     return response.data;
@@ -43,7 +43,7 @@ export const getAllProducts = async () => {
 ////add new product
 
 export const addProduct = async (product) => {
-    const url = `${baseURL}/product/v1/products`;
+    const url = `${baseURL}/api/v1/product`;
     const response = await axios.post(url, product);
     console.log(response.data);
     return response.data;
@@ -53,7 +53,7 @@ export const addProduct = async (product) => {
 
 export const getProductById = async (id) => {
     console.log("id", id);
-    const url = `${baseURL}/product/v1/products/${id}`;
+    const url = `${baseURL}/api/v1/product/${id}`;
     const response = await axios.get(url);
     console.log(response.data);
     return response.data;
@@ -62,7 +62,7 @@ export const getProductById = async (id) => {
 /////edit product 
 
 export const editProduct = async (product) => {
-    const url = `${baseURL}/product/v1/products/${product._id}`;
+    const url = `${baseURL}/api/v1/product/${product._id}`;
     const response = await axios.put(url, product);
     console.log(response.data);
     return response.data;
@@ -92,7 +92,7 @@ export const uploadImageToCloudinary = async (formData) => {
 /////order apis
 
 export const postNewOrder = async (order) => {
-    const url = `${baseURL}/orders/v1/order`;
+    const url = `${baseURL}/api/v1/order`;
     const response = await axios.post(url, order);
     console.log(response.data);
     return response.data;

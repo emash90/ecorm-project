@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }))
 const port = process.env.PORT || 5003
 const orderRoutes = require('./order-framework/express/routes/orderRoutes')
 
-app.use('/orders/v1/order', orderRoutes)
+app.use('/api/v1/order', orderRoutes)
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`)

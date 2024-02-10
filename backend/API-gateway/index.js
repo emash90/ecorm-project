@@ -21,16 +21,16 @@ const handleMicroserviceRequest = async (serviceName, req, res) => {
   let url;
   switch (serviceName) {
     case 'AUTH':
-      url = `${serviceURL}/auth/v1${req.url}`;
+      url = `${serviceURL}/api/v1/auth${req.url}`;
       break;
     case 'PRODUCT':
-      url = `${serviceURL}/product/v1${req.url}`;
+      url = `${serviceURL}/api/v1/product${req.url}`;
       break;
     case 'CART':
-      url = `${serviceURL}/cart/v1${req.url}`;
+      url = `${serviceURL}/api/v1/cart${req.url}`;
       break;
     case 'ORDER':
-      url = `${serviceURL}/orders/v1${req.url}`;
+      url = `${serviceURL}/api/v1/order${req.url}`;
       break;
     default:
       break;
@@ -49,21 +49,21 @@ const handleMicroserviceRequest = async (serviceName, req, res) => {
 };
 
 // Auth microservice
-app.use('/auth/v1', async (req, res) => {
+app.use('/api/v1/auth', async (req, res) => {
   await handleMicroserviceRequest('AUTH', req, res);
 });
 
 // Product microservice
-app.use('/product/v1', async (req, res) => {
+app.use('/api/v1/product', async (req, res) => {
   await handleMicroserviceRequest('PRODUCT', req, res);
 });
 
 // Cart microservice
-app.use('/cart/v1', async (req, res) => {
+app.use('/api/v1/cart', async (req, res) => {
   await handleMicroserviceRequest('CART', req, res);
 });
 
 // Order microservice
-app.use('/orders/v1', async (req, res) => {
+app.use('/api/v1/order', async (req, res) => {
   await handleMicroserviceRequest('ORDER', req, res);
 });
