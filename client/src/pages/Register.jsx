@@ -3,6 +3,7 @@ import { Footer, Navbar } from "../components";
 import { Link, useNavigate } from 'react-router-dom';
 import { useUserStore } from '../store/store';
 import { registerUser } from '../apiCalls/apiCalls';
+import { toast } from 'react-toastify';
 const Register = () => {
     const { loggedInUser, setLoggedInUser } = useUserStore();
     const navigate = useNavigate();
@@ -27,28 +28,35 @@ const Register = () => {
         e.preventDefault()
         console.log("form data", formData)
         if (!first_name || !last_name || !email || !password) {
-            alert("Please fill all the fields")
+            toast.error("Please fill all the fields")
             return
         }
         if (password !== confirm_password) {
-            alert("Password does not match")
+            toast.error("Password does not match")
             return
         }
         try {
-            const user = await registerUser(formData);
-            setLoggedInUser(user);
+            const response = await registerUser(formData)
+            // console.log("response", response)
+            if (response.message === "success") {
+                setLoggedInUser(response.data)
+
+                toast.success("Registration Successful")
+            } else {
+                toast.error(response.error)
+            }
         } catch (error) {
-            console.log("Error:", error);
-            
+            // console.log("error", error)
+            toast.error(error)
         }
     }
 
     useEffect(() => {
-        if (loggedInUser && loggedInUser.role === 'client') {
+        if (loggedInUser && loggedInUser.user_type === 'client') {
             navigate('/')
-        } else if (loggedInUser && loggedInUser.role === 'merchant') {
+        } else if (loggedInUser && loggedInUser.user_type === 'merchant') {
             navigate('/merchant')
-        } else if (loggedInUser && loggedInUser.role === 'admin') {
+        } else if (loggedInUser && loggedInUser.user_type === 'admin') {
             navigate('/admin')
         } else {
             navigate('/register')

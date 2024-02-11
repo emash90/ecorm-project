@@ -3,8 +3,12 @@ const makeRegisterUserUseCase = ({ userRepository, passwordManager, userEntity }
         const hashedPassword = await passwordManager.encrypt(password);
         const user = userEntity({ last_name, first_name, user_type, password: hashedPassword, email });
         const createdUser = await userRepository.insertUser(user);
-        console.log('createdUser===>', createdUser);
-        return createdUser;
+        ////if user already exists
+        if (!createdUser) {
+            throw new Error('User already exists');
+        } else {
+            return createdUser;
+        }
     }
     return registerUserUseCase;
 }

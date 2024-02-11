@@ -5,7 +5,6 @@ connectDB();
 
 const makeUserDb = () => {
     const insert = async (userDetails) => {
-        console.log('userDetails ===>', userDetails);
         const userExists = await User.findOne({ email: userDetails.email });
         if (userExists) {
             throw new Error('User already exists');

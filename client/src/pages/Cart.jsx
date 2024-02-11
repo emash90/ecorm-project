@@ -2,13 +2,14 @@ import React from "react";
 import { Footer, Navbar } from "../components";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
+import { toast } from "react-toastify";
 const { useCartStore, useUserStore } = require("../store/store");
 const { postNewOrder } = require("../apiCalls/apiCalls");
 
 const Cart = () => {
   const navigate = useNavigate();
   const { cart, addToCart, removeFromCart, clearCart } = useCartStore();
-  console.log("cart", cart);
+  // console.log("cart", cart);
 
   const EmptyCart = () => {
     return (
@@ -50,9 +51,9 @@ const Cart = () => {
     const handleCheckout = (e) => {
       e.preventDefault();
       /////create order
-      console.log("loggedInUser", loggedInUser);
+      // console.log("loggedInUser", loggedInUser);
       if (!loggedInUser) {
-        alert("Please login to checkout");
+        toast.error("Please login to checkout");
         return;
       }
       let order = {
@@ -60,19 +61,20 @@ const Cart = () => {
         totalAmount: subtotal + shipping,
         customerId: loggedInUser._id,
       };
-      console.log("order", order);
+      // console.log("order", order);
       /////post order to database
       const postOrder = async () => {
         try {
           const response = await postNewOrder(order);
-          console.log("response", response);
+          // console.log("response", response);
           if (response.message === "Order created successfully") {
-            alert("Order created successfully");
+            toast.success("Order created successfully");
           }
           clearCart();
           navigate("/");
         } catch (error) {
-          console.log("error", error);
+          // console.log("error", error);
+          toast.error(error);
         }
       }
       postOrder();
