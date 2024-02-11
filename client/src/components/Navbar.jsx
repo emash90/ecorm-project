@@ -6,7 +6,6 @@ import { useCartStore, useUserStore } from '../store/store';
 const Navbar = () => {
     const { loggedInUser, logout  } = useUserStore();
     const { cart } = useCartStore();
-    console.log("loggedInUser", loggedInUser)
 
     const handleProfile = () => {
 
@@ -50,7 +49,7 @@ const Navbar = () => {
                                     </NavLink>
                                 </li>
                                 <li className="nav-item">
-                                    <NavLink className="nav-link" to="/about">
+                                    <NavLink className="nav-link" to="/orders">
                                         My Orders
                                     </NavLink>
                                 </li>
@@ -63,7 +62,7 @@ const Navbar = () => {
                         </div>
                     </> 
                     )}
-                { loggedInUser == null || loggedInUser.user_type === 'client' && (
+                { (!loggedInUser || loggedInUser.user_type === 'client') && (
                     <>
                         <div className="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul className="navbar-nav m-auto my-2 text-center">

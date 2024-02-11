@@ -20,6 +20,10 @@ const makeProductRepo = ({ database }) => {
             const product = await database.updateProduct(id, productEntity);
             return product;
         },
+        findProductsByMerchantId: async (merchantId) => {
+            const products = await database.getProductsByMerchantId(merchantId);
+            return products;
+        },
         deleteProduct: async (id) => {
             const product = await database.deleteProduct(id);
             return product;

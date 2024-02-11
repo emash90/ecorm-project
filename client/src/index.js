@@ -18,6 +18,7 @@ import {
     Register,
     Checkout,
     PageNotFound,
+    MyOrders,
 } from "./pages";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -31,6 +32,7 @@ root.render(
             <Route path="/product" element={<Products />} />
             <Route path="/product/:id" element={<Product />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/orders" element={<MyOrders />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/login" element={<Login />} />
