@@ -5,6 +5,7 @@ import { Image } from 'cloudinary-react';
 import { useSelector } from 'react-redux';
 import { useUserStore } from '../store/store';
 import { addProduct, uploadImageToCloudinary, cloudName } from '../apiCalls/apiCalls';
+import { toast } from 'react-toastify';
 
 const AddProductForm = () => {
     const { loggedInUser } = useUserStore();
@@ -51,13 +52,9 @@ const AddProductForm = () => {
     
         try {
             const res = await uploadImageToCloudinary(data);
-            console.log("res", res)
             const file = await res
-            console.log(file);
-            console.log("file url", file.secure_url)
             // Check if the image URL already exists in the imagePreview array
             if (imagePreview.includes(file.secure_url)) {
-                console.error('Error: Similar image has already been uploaded.');
                 // Handle the error as needed, such as displaying an error message to the user
             } else {
                 setImagePreview((prevImages) => [...prevImages, file.secure_url]);
@@ -72,22 +69,22 @@ const AddProductForm = () => {
 
     const handleAddProduct = async (e) => {
         e.preventDefault()
-        console.log("product details", product_details)
+        // console.log("product details", product_details)
         if (!name || !description || !price || !category || !subcategory || !quantity) {
-            alert("Please fill all the fields")
+            toast.error('All fields are required');
             return
         }
-        product_details.session_id = loggedInUser.session_id;
+        product_details.user_id = loggedInUser._id;
         try {
                 const response = await addProduct(product_details);
-                console.log("response", response)
+                // console.log("response", response)
                 if (response.message === "Product created successfully") {
-                    alert("Product added successfully")
+                    toast.success('Product added successfully');
                     navigate('/merchant')
                 }
         } catch (error) {
             console.log("error", error)
-
+            toast.error('Error adding product');
         }
     }
   return (

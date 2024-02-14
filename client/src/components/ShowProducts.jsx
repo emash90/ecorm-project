@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 import { Image } from "cloudinary-react";
 
 const ShowProducts = ({ filterProduct, cloudName,  filter, navigateToProduct, setFilter, data }) => {
-  console.log("filter", filter);
-  console.log("data", data);
   return (
     <>
     <Nav className="justify-content-center" activeKey="/home" variant="tabs" bg="light" >

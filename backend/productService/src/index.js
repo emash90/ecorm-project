@@ -16,4 +16,4 @@ app.listen(PORT, () => {
 
 const productRoutes = require('./product-framework/express/routes/productRoutes');
 
-app.use('/product/v1/products', productRoutes);
+app.use('/api/v1/product', productRoutes);

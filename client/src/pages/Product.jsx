@@ -122,10 +122,10 @@ const Product = () => {
           handleClose();
           navigate("/product/" + data._id);
         } else {
-          console.error("Error updating product:", data.message);
+          // console.error("Error updating product:", data.message);
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        // console.error("Error fetching data:", error);
       }
     };
     updateProduct();
@@ -133,7 +133,7 @@ const Product = () => {
   };
 
   const handleDeleteImage = (image) => {
-    console.log("delete image", image);
+    // console.log("delete image", image);
     productToEdit.images = productToEdit.images.filter((item) => item !== image);
     setProductToEdit({ ...productToEdit });
   }

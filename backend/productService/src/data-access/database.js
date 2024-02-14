@@ -1,5 +1,6 @@
 const Product = require('./productModel');
 const connectDB = require('./db');
+const { default: mongoose } = require('mongoose');
 
 connectDB();
 
@@ -29,6 +30,9 @@ const makeProductDb = () => {
         console.log('getAllProducts ===>');
         return Product.find({}).lean();
     }
+    const getProductsByMerchantId = async (merchantId) => {
+        return Product.find({ user_id: merchantId })
+    }
     const updateProduct = async (id, productDetails) => {
         const product = await Product.findByIdAndUpdate(id, productDetails, { new: true });
         return product;
@@ -43,7 +47,8 @@ const makeProductDb = () => {
         getProductById,
         getAllProducts,
         updateProduct,
-        deleteProduct
+        deleteProduct,
+        getProductsByMerchantId
     }
 }
 

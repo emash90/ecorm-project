@@ -12,6 +12,7 @@ const makeGetAllProductsUseCase = require('../../../product-usecases/getAllProdu
 const makeGetProductByIdUseCase = require('../../../product-usecases/getProductByIdUseCase');
 const makeUpdateProductUseCase = require('../../../product-usecases/updateProductUseCase');
 const makeDeleteProductUseCase = require('../../../product-usecases/deleteProductUseCase');
+const makeGetProductsByMerchantIdUseCase = require('../../../product-usecases/getProductsByMerchantIdUseCase');
 
 // Importing the Product Repository
 
@@ -39,16 +40,18 @@ const getAllProductsUseCase = makeGetAllProductsUseCase({ productRepository });
 const updateProductUseCase = makeUpdateProductUseCase({ productRepository });
 const deleteProductUseCase = makeDeleteProductUseCase({ productRepository });
 const getProductByIdUseCase = makeGetProductByIdUseCase({ productRepository });
+const getProductsByMerchantIdUseCase = makeGetProductsByMerchantIdUseCase({ productRepository });
 const productPresenter = makeProductPresenter();
 
 // Building the Product Controller
 
-const productController = makeProductControllers({ addProductUseCase, getAllProductsUseCase, getProductByIdUseCase, updateProductUseCase, deleteProductUseCase, productPresenter });
+const productController = makeProductControllers({ getProductsByMerchantIdUseCase, addProductUseCase, getAllProductsUseCase, getProductByIdUseCase, updateProductUseCase, deleteProductUseCase, productPresenter });
 
 // Defining the Product Routes
 
 router.post('/', productController.createProduct);
 router.get('/', productController.getAllProducts);
+router.get('/merchant/:merchantId', productController.getProductByMerchantId);
 router.get('/:productId', productController.getProductById);
 router.put('/:productId', productController.updateProduct);
 router.delete('/:productId', productController.deleteProduct);

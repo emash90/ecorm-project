@@ -1,4 +1,4 @@
-const makeProductControllers = ({ addProductUseCase, getAllProductsUseCase, getProductByIdUseCase, updateProductUseCase, deleteProductUseCase, productPresenter }) => {
+const makeProductControllers = ({ addProductUseCase, getAllProductsUseCase, getProductByIdUseCase, updateProductUseCase, deleteProductUseCase, getProductsByMerchantIdUseCase, productPresenter }) => {
     return Object.freeze({
         createProduct: async (req, res) => {
             try {
@@ -34,6 +34,15 @@ const makeProductControllers = ({ addProductUseCase, getAllProductsUseCase, getP
                 const { body } = req;
                 const product = await updateProductUseCase(productId, body);
                 return productPresenter.success(res, product);
+            } catch (error) {
+                return productPresenter.fail(res, error);
+            }
+        },
+        getProductByMerchantId: async (req, res) => {
+            try {
+                const { merchantId } = req.params;
+                const products = await getProductsByMerchantIdUseCase(merchantId);
+                return productPresenter.success(res, products);
             } catch (error) {
                 return productPresenter.fail(res, error);
             }

@@ -10,7 +10,7 @@ app.use(cors());
 
 const userRoutes = require('../src/user-framework/express/routes/userRoutes');
 
-app.use('/auth/v1', userRoutes);
+app.use('/api/v1/auth', userRoutes);
 
 app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
