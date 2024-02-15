@@ -17,7 +17,7 @@ services:
     image: emash90/skin-backend-auth:1.0.1
     container_name: authService
     volumes:
-      - ./backend/authservice:/app
+      - ./backend/AuthService:/app
       - /app/node_modules
     environment:
       - NODE_ENV=development
@@ -46,7 +46,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ./backend/api-gateway:/app
+      - ./backend/API-gateway:/app
       - /app/node_modules
     depends_on:
       - authService
@@ -63,7 +63,7 @@ services:
     image: emash90/skin-backend-products:1.0.1
     container_name: productService
     volumes:
-      - ./backend/productservice:/app
+      - ./backend/productService:/app
       - /app/node_modules
     depends_on:
       - db
@@ -83,7 +83,7 @@ services:
     image: emash90/skin-backend-orders:1.0.1
     container_name: orderService
     volumes:
-      - ./backend/orderservice:/app
+      - ./backend/orderService:/app
       - /app/node_modules
     depends_on:
       - db
