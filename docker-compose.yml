@@ -14,7 +14,7 @@ services:
       - MONGO_PORT=27017
       - MONGO_DB=auth
   authService:
-    image: emash90/skin-backend-auth:1.0.0
+    image: emash90/skin-backend-auth:1.0.1
     container_name: authService
     volumes:
       - ./backend/authservice:/app
@@ -41,7 +41,7 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
   apiGateway:
-    image: emash90/skin-backend-gateway:1.0.0
+    image: emash90/skin-backend-gateway:1.0.1
     container_name: apiGateway
     ports:
       - "5000:5000"
@@ -60,7 +60,7 @@ services:
       - ORDER_SERVICE_PORT=5002
     command: ["npm", "run", "dev"]
   productService:
-    image: emash90/skin-backend-products:1.0.0
+    image: emash90/skin-backend-products:1.0.1
     container_name: productService
     volumes:
       - ./backend/productservice:/app
@@ -80,7 +80,7 @@ services:
       - PORT=5001
     command: ["npm", "run", "dev"]
   orderService:
-    image: emash90/skin-backend-orders:1.0.0
+    image: emash90/skin-backend-orders:1.0.1
     container_name: orderService
     volumes:
       - ./backend/orderservice:/app
