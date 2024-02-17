@@ -2,6 +2,7 @@ import axios from "axios";
 
 const baseURL = process.env.REACT_APP_API_GATEWAY_HOST;
 ////login user
+console.log("baseURL ===>", baseURL);
 
 export const loginUser = async (user) => {
     try {

@@ -9,7 +9,7 @@ const connectDB = () => {
       .then(() => console.log('MongoDB Connected'))
       .catch(err => {
           console.log(err);
-          setTimeout(connect_with_retry, 5000);
+          setTimeout(connectDB, 5000);
       });
 };
 
