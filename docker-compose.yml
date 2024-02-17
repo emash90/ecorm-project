@@ -100,7 +100,7 @@ services:
       - PORT=5002
     command: ["npm", "run", "dev"]
   client:
-    image: emash90/skin-client:1.0.0
+    image: emash90/skin_client:1.0.1
     container_name: client
     ports:
       - "3000:3000"
