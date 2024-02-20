@@ -29,10 +29,6 @@ services:
     volumes:
       - ./backend/API-gateway:/app
       - /app/node_modules
-    depends_on:
-      - authService
-      - productService
-      - orderService
     env_file:
       - .env
     ports:
@@ -45,8 +41,6 @@ services:
     volumes:
       - ./backend/productService:/app
       - /app/node_modules
-    depends_on:
-      - redis
     env_file:
       - .env
     ports:
@@ -59,8 +53,6 @@ services:
     volumes:
       - ./backend/orderService:/app
       - /app/node_modules
-    depends_on:
-      - redis
     env_file:
       - .env
     ports:
