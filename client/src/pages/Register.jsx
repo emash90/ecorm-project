@@ -77,7 +77,7 @@ const Register = () => {
                                 <input
                                     type="text"
                                     class="form-control"
-                                    id="username"
+                                    id="first_name"
                                     name="first_name"
                                     value={first_name}
                                     onChange={handleInput}
@@ -89,7 +89,7 @@ const Register = () => {
                                 <input
                                     type="text"
                                     class="form-control"
-                                    id="username"
+                                    id="last_name"
                                     name="last_name"
                                     value={last_name}
                                     onChange={handleInput}

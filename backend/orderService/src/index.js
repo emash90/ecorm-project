@@ -10,7 +10,7 @@ app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-const port = process.env.PORT || 5003
+const port = process.env.ORDER_SERVICE_PORT || 5003
 const orderRoutes = require('./order-framework/express/routes/orderRoutes')
 
 app.use('/api/v1/order', orderRoutes)
