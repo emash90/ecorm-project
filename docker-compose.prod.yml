@@ -12,7 +12,7 @@ services:
       - REDIS_PORT_FILE=/run/secrets/REDIS_PORT
       - AUTH_SERVICE_PORT_FILE=/run/secrets/AUTH_SERVICE_PORT
     ports:
-      - "${AUTH_SERVICE_PORT}:${AUTH_SERVICE_PORT}"
+      - ${AUTH_SERVICE_PORT}:${AUTH_SERVICE_PORT}
     command: ["npm", "run", "dev"]
     secrets:
       - NODE_ENV
@@ -26,7 +26,7 @@ services:
       - REDIS_HOST_FILE=/run/secrets/REDIS_HOST
       - REDIS_PORT_FILE=/run/secrets/REDIS_PORT
     ports:
-      - "${REDIS_PORT}:${REDIS_PORT}"
+      - ${REDIS_PORT}:${REDIS_PORT}
     secrets:
       - REDIS_HOST
       - REDIS_PORT
@@ -43,7 +43,7 @@ services:
       - REDIS_PORT_FILE=/run/secrets/REDIS_PORT
       - AUTH_SERVICE_PORT_FILE=/run/secrets/AUTH_SERVICE_PORT
     ports:
-      - "${API_GATEWAY_PORT}:${API_GATEWAY_PORT}"
+      - ${API_GATEWAY_PORT}:${API_GATEWAY_PORT}
     command: ["npm", "run", "dev"]
     secrets:
       - NODE_ENV
@@ -62,7 +62,7 @@ services:
       - REDIS_PORT_FILE=/run/secrets/REDIS_PORT
       - AUTH_SERVICE_PORT_FILE=/run/secrets/AUTH_SERVICE_PORT
     ports:
-      - "${PRODUCT_SERVICE_PORT}:${PRODUCT_SERVICE_PORT}"
+      - ${PRODUCT_SERVICE_PORT}:${PRODUCT_SERVICE_PORT}
     command: ["npm", "run", "dev"]
     secrets:
       - NODE_ENV
@@ -81,7 +81,7 @@ services:
       - REDIS_PORT_FILE=/run/secrets/REDIS_PORT
       - AUTH_SERVICE_PORT_FILE=/run/secrets/AUTH_SERVICE_PORT
     ports:
-      - "${ORDER_SERVICE_PORT}:${ORDER_SERVICE_PORT}"
+      - ${ORDER_SERVICE_PORT}:${ORDER_SERVICE_PORT}
     command: ["npm", "run", "dev"]
     secrets:
       - NODE_ENV
@@ -101,7 +101,7 @@ services:
       - REACT_APP_API_GATEWAY_HOST_FILE=/run/secrets/REACT_APP_API_GATEWAY_HOST
       - CLIENT_PORT_FILE=/run/secrets/CLIENT_PORT
     ports:
-      - "${CLIENT_PORT}:${CLIENT_PORT}"
+      - ${CLIENT_PORT}:${CLIENT_PORT}
     command: ["npm", "start"]
     secrets:
       - NODE_ENV
