@@ -1,0 +1,106 @@
+version: '3.1'
+services:
+  authService:
+    image: emash90/skin-backend-auth:1.0.2
+    container_name: authService
+    volumes:
+      - ./backend/AuthService:/app
+      - /app/node_modules
+    secrets:
+      - NODE_ENV
+      - REDIS_HOST
+      - REDIS_PORT
+      - AUTH_SERVICE_PORT
+      - PRODUCT_SERVICE_PORT
+      - ORDER_SERVICE_PORT
+      - ORDER_SERVICE_HOST
+      - PRODUCT_SERVICE_HOST
+      - AUTH_SERVICE_HOST
+    ports:
+      - ${AUTH_SERVICE_PORT}:${AUTH_SERVICE_PORT}
+    command: ["npm", "run", "dev"]
+
+  redis:
+    image: redis
+    container_name: redis
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+
+  apiGateway:
+    image: emash90/skin-backend-gateway:1.0.2
+    container_name: apiGateway
+    volumes:
+      - ./backend/API-gateway:/app
+      - /app/node_modules
+    secrets:
+      - NODE_ENV
+      - REDIS_HOST
+      - REDIS_PORT
+      - AUTH_SERVICE_PORT
+      - PRODUCT_SERVICE_PORT
+      - ORDER_SERVICE_PORT
+      - ORDER_SERVICE_HOST
+      - PRODUCT_SERVICE_HOST
+      - AUTH_SERVICE_HOST
+    ports:
+      - ${API_GATEWAY_PORT}:${API_GATEWAY_PORT}
+    command: ["npm", "run", "dev"]
+
+  productService:
+    image: emash90/skin-backend-products:1.0.2
+    container_name: productService
+    volumes:
+      - ./backend/productService:/app
+      - /app/node_modules
+    secrets:
+      - NODE_ENV
+      - REDIS_HOST
+      - REDIS_PORT
+      - AUTH_SERVICE_PORT
+      - PRODUCT_SERVICE_PORT
+      - ORDER_SERVICE_PORT
+      - ORDER_SERVICE_HOST
+      - PRODUCT_SERVICE_HOST
+      - AUTH_SERVICE_HOST
+    ports:
+      - ${PRODUCT_SERVICE_PORT}:${PRODUCT_SERVICE_PORT}
+    command: ["npm", "run", "dev"]
+
+  orderService:
+    image: emash90/skin-backend-orders:1.0.2
+    container_name: orderService
+    volumes:
+      - ./backend/orderService:/app
+      - /app/node_modules
+    secrets:
+      - NODE_ENV
+      - REDIS_HOST
+      - REDIS_PORT
+      - AUTH_SERVICE_PORT
+      - PRODUCT_SERVICE_PORT
+      - ORDER_SERVICE_PORT
+      - ORDER_SERVICE_HOST
+      - PRODUCT_SERVICE_HOST
+      - AUTH_SERVICE_HOST
+    ports:
+      - ${ORDER_SERVICE_PORT}:${ORDER_SERVICE_PORT}
+    command: ["npm", "run", "dev"]
+
+  client:
+    image: emash90/skin_client:1.0.2
+    container_name: client
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    secrets:
+      - NODE_ENV
+      - REACT_APP_CLOUDINARY_CLOUD_NAME
+      - REACT_APP_CLOUDINARY_UPLOAD_PRESET
+      - REACT_APP_API_GATEWAY_HOST
+      - CLIENT_PORT
+    ports:
+      - ${CLIENT_PORT}:${CLIENT_PORT}
+    command: ["npm", "start"]
