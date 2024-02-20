@@ -17,7 +17,7 @@ services:
       - PRODUCT_SERVICE_HOST
       - AUTH_SERVICE_HOST
     ports:
-      - ${AUTH_SERVICE_PORT}:${AUTH_SERVICE_PORT}
+      - "${AUTH_SERVICE_PORT}:${AUTH_SERVICE_PORT}"
     command: ["npm", "run", "dev"]
 
   redis:
@@ -27,7 +27,7 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     ports:
-      - ${REDIS_PORT}:${REDIS_PORT}
+      - "${REDIS_PORT}:${REDIS_PORT}"
 
   apiGateway:
     image: emash90/skin-backend-gateway:1.0.2
@@ -46,7 +46,7 @@ services:
       - PRODUCT_SERVICE_HOST
       - AUTH_SERVICE_HOST
     ports:
-      - ${API_GATEWAY_PORT}:${API_GATEWAY_PORT}
+      - "${API_GATEWAY_PORT}:${API_GATEWAY_PORT}"
     command: ["npm", "run", "dev"]
 
   productService:
@@ -66,7 +66,7 @@ services:
       - PRODUCT_SERVICE_HOST
       - AUTH_SERVICE_HOST
     ports:
-      - ${PRODUCT_SERVICE_PORT}:${PRODUCT_SERVICE_PORT}
+      - "${PRODUCT_SERVICE_PORT}:${PRODUCT_SERVICE_PORT}"
     command: ["npm", "run", "dev"]
 
   orderService:
@@ -86,7 +86,7 @@ services:
       - PRODUCT_SERVICE_HOST
       - AUTH_SERVICE_HOST
     ports:
-      - ${ORDER_SERVICE_PORT}:${ORDER_SERVICE_PORT}
+      - "${ORDER_SERVICE_PORT}:${ORDER_SERVICE_PORT}"
     command: ["npm", "run", "dev"]
 
   client:
@@ -102,5 +102,5 @@ services:
       - REACT_APP_API_GATEWAY_HOST
       - CLIENT_PORT
     ports:
-      - ${CLIENT_PORT}:${CLIENT_PORT}
+      - "${CLIENT_PORT}:${CLIENT_PORT}"
     command: ["npm", "start"]
