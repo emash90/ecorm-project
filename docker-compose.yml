@@ -1,7 +1,7 @@
 version: '3.1'
 services:
   authService:
-    image: emash90/skin-backend-auth:1.0.1
+    image: emash90/skin-backend-auth:1.0.2
     container_name: authService
     volumes:
       - ./backend/AuthService:/app
@@ -24,7 +24,7 @@ services:
       - REDIS_PORT=6379
 
   apiGateway:
-    image: emash90/skin-backend-gateway:1.0.1
+    image: emash90/skin-backend-gateway:1.0.2
     container_name: apiGateway
     volumes:
       - ./backend/API-gateway:/app
@@ -40,7 +40,7 @@ services:
     command: ["npm", "run", "dev"]
 
   productService:
-    image: emash90/skin-backend-products:1.0.1
+    image: emash90/skin-backend-products:1.0.2
     container_name: productService
     volumes:
       - ./backend/productService:/app
@@ -54,7 +54,7 @@ services:
     command: ["npm", "run", "dev"]
 
   orderService:
-    image: emash90/skin-backend-orders:1.0.1
+    image: emash90/skin-backend-orders:1.0.2
     container_name: orderService
     volumes:
       - ./backend/orderService:/app
@@ -68,7 +68,7 @@ services:
     command: ["npm", "run", "dev"]
 
   client:
-    image: emash90/skin_client:1.0.1
+    image: emash90/skin_client:1.0.2
     container_name: client
     volumes:
       - ./client:/app
