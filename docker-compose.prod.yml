@@ -1,99 +1,105 @@
-version: '3.1'
+version: '3.7'
+
 services:
   authService:
     image: emash90/skin-backend-auth:1.0.2
-    container_name: authService
-    volumes:
-      - ./backend/AuthService:/app
-      - /app/node_modules
     environment:
       - NODE_ENV_FILE=/run/secrets/NODE_ENV
       - REDIS_HOST_FILE=/run/secrets/REDIS_HOST
       - REDIS_PORT_FILE=/run/secrets/REDIS_PORT
       - AUTH_SERVICE_PORT_FILE=/run/secrets/AUTH_SERVICE_PORT
     ports:
-      - ${AUTH_SERVICE_PORT}:${AUTH_SERVICE_PORT}
+      - "${AUTH_SERVICE_PORT}:${AUTH_SERVICE_PORT}"
     command: ["npm", "run", "dev"]
     secrets:
       - NODE_ENV
       - REDIS_HOST
       - REDIS_PORT
       - AUTH_SERVICE_PORT
+
   redis:
     image: redis
-    container_name: redis
     environment:
       - REDIS_HOST_FILE=/run/secrets/REDIS_HOST
       - REDIS_PORT_FILE=/run/secrets/REDIS_PORT
     ports:
-      - ${REDIS_PORT}:${REDIS_PORT}
+      - "6379:6379"
     secrets:
       - REDIS_HOST
       - REDIS_PORT
 
   apiGateway:
     image: emash90/skin-backend-gateway:1.0.2
-    container_name: apiGateway
-    volumes:
-      - ./backend/API-gateway:/app
-      - /app/node_modules
     environment:
       - NODE_ENV_FILE=/run/secrets/NODE_ENV
       - REDIS_HOST_FILE=/run/secrets/REDIS_HOST
       - REDIS_PORT_FILE=/run/secrets/REDIS_PORT
       - AUTH_SERVICE_PORT_FILE=/run/secrets/AUTH_SERVICE_PORT
+      - PRODUCT_SERVICE_PORT_FILE=/run/secrets/PRODUCT_SERVICE_PORT
+      - ORDER_SERVICE_PORT_FILE=/run/secrets/ORDER_SERVICE_PORT
+      - API_GATEWAY_PORT_FILE=/run/secrets/API_GATEWAY_PORT
+      - CLIENT_PORT_FILE=/run/secrets/CLIENT_PORT
     ports:
-      - ${API_GATEWAY_PORT}:${API_GATEWAY_PORT}
+      - "${API_GATEWAY_PORT}:${API_GATEWAY_PORT}"
     command: ["npm", "run", "dev"]
     secrets:
       - NODE_ENV
       - REDIS_HOST
       - REDIS_PORT
       - AUTH_SERVICE_PORT
+      - PRODUCT_SERVICE_PORT
+      - ORDER_SERVICE_PORT
+      - API_GATEWAY_PORT
+      - CLIENT_PORT
+
   productService:
     image: emash90/skin-backend-products:1.0.2
-    container_name: productService
-    volumes:
-      - ./backend/productService:/app
-      - /app/node_modules
     environment:
       - NODE_ENV_FILE=/run/secrets/NODE_ENV
       - REDIS_HOST_FILE=/run/secrets/REDIS_HOST
       - REDIS_PORT_FILE=/run/secrets/REDIS_PORT
       - AUTH_SERVICE_PORT_FILE=/run/secrets/AUTH_SERVICE_PORT
+      - PRODUCT_SERVICE_PORT_FILE=/run/secrets/PRODUCT_SERVICE_PORT
+      - API_GATEWAY_PORT_FILE=/run/secrets/API_GATEWAY_PORT
+      - CLIENT_PORT_FILE=/run/secrets/CLIENT_PORT
     ports:
-      - ${PRODUCT_SERVICE_PORT}:${PRODUCT_SERVICE_PORT}
+      - "${PRODUCT_SERVICE_PORT}:${PRODUCT_SERVICE_PORT}"
     command: ["npm", "run", "dev"]
     secrets:
       - NODE_ENV
       - REDIS_HOST
       - REDIS_PORT
       - AUTH_SERVICE_PORT
+      - PRODUCT_SERVICE_PORT
+      - API_GATEWAY_PORT
+      - CLIENT_PORT
+
   orderService:
     image: emash90/skin-backend-orders:1.0.2
-    container_name: orderService
-    volumes:
-      - ./backend/orderService:/app
-      - /app/node_modules
     environment:
       - NODE_ENV_FILE=/run/secrets/NODE_ENV
       - REDIS_HOST_FILE=/run/secrets/REDIS_HOST
       - REDIS_PORT_FILE=/run/secrets/REDIS_PORT
       - AUTH_SERVICE_PORT_FILE=/run/secrets/AUTH_SERVICE_PORT
+      - ORDER_SERVICE_PORT_FILE=/run/secrets/ORDER_SERVICE_PORT
+      - PRODUCT_SERVICE_PORT_FILE=/run/secrets/PRODUCT_SERVICE_PORT
+      - API_GATEWAY_PORT_FILE=/run/secrets/API_GATEWAY_PORT
+      - CLIENT_PORT_FILE=/run/secrets/CLIENT_PORT
     ports:
-      - ${ORDER_SERVICE_PORT}:${ORDER_SERVICE_PORT}
+      - "${ORDER_SERVICE_PORT}:${ORDER_SERVICE_PORT}"
     command: ["npm", "run", "dev"]
     secrets:
       - NODE_ENV
       - REDIS_HOST
       - REDIS_PORT
       - AUTH_SERVICE_PORT
+      - ORDER_SERVICE_PORT
+      - PRODUCT_SERVICE_PORT
+      - API_GATEWAY_PORT
+      - CLIENT_PORT
+
   client:
     image: emash90/skin_client:1.0.2
-    container_name: client
-    volumes:
-      - ./client:/app
-      - /app/node_modules
     environment:
       - NODE_ENV_FILE=/run/secrets/NODE_ENV
       - REACT_APP_CLOUDINARY_CLOUD_NAME_FILE=/run/secrets/REACT_APP_CLOUDINARY_CLOUD_NAME
@@ -101,7 +107,7 @@ services:
       - REACT_APP_API_GATEWAY_HOST_FILE=/run/secrets/REACT_APP_API_GATEWAY_HOST
       - CLIENT_PORT_FILE=/run/secrets/CLIENT_PORT
     ports:
-      - ${CLIENT_PORT}:${CLIENT_PORT}
+      - "${CLIENT_PORT}:${CLIENT_PORT}"
     command: ["npm", "start"]
     secrets:
       - NODE_ENV
@@ -109,3 +115,50 @@ services:
       - REACT_APP_CLOUDINARY_UPLOAD_PRESET
       - REACT_APP_API_GATEWAY_HOST
       - CLIENT_PORT
+      - API_GATEWAY_PORT
+
+secrets:
+  NODE_ENV:
+    external: true
+  REACT_APP_CLOUDINARY_CLOUD_NAME:
+    external: true
+  REACT_APP_CLOUDINARY_UPLOAD_PRESET:
+    external: true
+  REACT_APP_API_GATEWAY_HOST:
+    external: true
+  MONGODB_URI:
+    external: true
+  MONGO_USERNAME:
+    external: true
+  MONGO_PASSWORD:
+    external: true
+  MONGO_HOST:
+    external: true
+  MONGO_PORT:
+    external: true
+  REDIS_HOST:
+    external: true
+  REDIS_PORT:
+    external: true
+  CLIENT_PORT:
+    external: true
+  API_GATEWAY_PORT:
+    external: true
+  AUTH_SERVICE_PORT:
+    external: true
+  PRODUCT_SERVICE_PORT:
+    external: true
+  ORDER_SERVICE_PORT:
+    external: true
+  MONGO_AUTH_DB:
+    external: true
+  MONGO_ORDER_DB:
+    external: true
+  MONGO_PRODUCT_DB:
+    external: true
+  ORDER_SERVICE_HOST:
+    external: true
+  PRODUCT_SERVICE_HOST:
+    external: true
+  AUTH_SERVICE_HOST:
+    external: true
