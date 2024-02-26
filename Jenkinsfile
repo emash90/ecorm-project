@@ -9,9 +9,9 @@ pipeline {
           }
         }
 
-        stage('parallel stage') {
+        stage('') {
           steps {
-            sh 'console.log("running build for skin project")'
+            echo 'test parallel stages'
           }
         }
 
