@@ -2,8 +2,19 @@ pipeline {
   agent any
   stages {
     stage('start') {
-      steps {
-        echo 'build began'
+      parallel {
+        stage('start') {
+          steps {
+            echo 'build began'
+          }
+        }
+
+        stage('parallel stage') {
+          steps {
+            sh 'console.log("running build for skin project")'
+          }
+        }
+
       }
     }
 
