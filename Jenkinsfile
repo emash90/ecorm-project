@@ -1,20 +1,9 @@
 pipeline {
   agent any
   stages {
-    stage('start') {
-      parallel {
-        stage('start') {
-          steps {
-            echo 'build began'
-          }
-        }
-
-        stage('') {
-          steps {
-            echo 'test parallel stages'
-          }
-        }
-
+    stage('checkout repo') {
+      steps {
+        git(url: 'https://github.com/emash90/ecorm-project.git', branch: 'dev')
       }
     }
 
