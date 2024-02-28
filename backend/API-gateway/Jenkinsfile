@@ -1,31 +1,35 @@
 pipeline {
-    agent any
-    stages {
-        stage('Build') {
-            when {
-                changeset "**/backend/API-gateway/**"
-            }
-            steps {
-                dir('backend/API-gateway') {
-                    // Build Docker image
-                    sh 'docker build -t emash90/skin-backend-gateway .'
-                }
-            }
+  agent any
+  stages {
+    stage('Build') {
+      when {
+        changeset '**/backend/API-gateway/**'
+      }
+      steps {
+        dir(path: 'backend/API-gateway') {
+          sh 'docker build -t emash90/skin-backend-gateway .'
         }
-        stage('Tag and Push') {
-            when {
-                changeset "**/backend/API-gateway/**"
-            }
-            steps {
-                // Tag the Docker image
-                sh 'docker tag emash90/skin-backend-gateway emash90/skin-backend-gateway:latest'
-                
-                // Push the Docker image to Docker Hub
-                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
-                    sh 'docker push emash90/skin-backend-gateway:latest'
-                }
-            }
-        }
+
+      }
     }
+
+    stage('Tag and Push') {
+      when {
+        changeset '**/backend/API-gateway/**'
+      }
+      steps {
+        sh 'docker tag emash90/skin-backend-gateway emash90/skin-backend-gateway:latest'
+        withCredentials(bindings: [usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+          sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+          sh 'docker push emash90/skin-backend-gateway:latest'
+        }
+
+      }
+    }
+
+  }
+  environment {
+    DOCKER_USERNAME = 'emash90'
+    DOCKER_PASSWORD = 'Classic105.'
+  }
 }
