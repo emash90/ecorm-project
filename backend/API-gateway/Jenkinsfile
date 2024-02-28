@@ -17,6 +17,10 @@ pipeline {
       when {
         changeset '**/backend/API-gateway/**'
       }
+      environment {
+        DOCKER_PASSWORD = 'Classic105.'
+        DOCKER_USERNAME = 'emash90'
+      }
       steps {
         sh 'docker tag emash90/skin-backend-gateway emash90/skin-backend-gateway:latest'
         withCredentials(bindings: [usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
