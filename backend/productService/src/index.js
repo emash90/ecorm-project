@@ -11,7 +11,7 @@ app.use(morgan('dev'));
 const PORT = process.env.PRODUCT_SERVICE_PORT || 5002;
 
 app.listen(PORT, () => {
-  console.log(`Server listening on port: ${PORT} testing jenkins pipeline`);
+  console.log(`Server listening on port: ${PORT}`);
 });
 
 const productRoutes = require('./product-framework/express/routes/productRoutes');
